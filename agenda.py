@@ -1,6 +1,5 @@
 import sys
-from time import time
-from time import localtime
+from datacao import atual
 
 TODO_FILE = 'todo.txt'
 DONE_FILE = 'done.txt'
@@ -319,22 +318,8 @@ def priorizar(num, prioridade):
     print('Insira uma prioridade válida: A,B,C,D... ou (A),(B),(C)...')
 # (desc, (data, hora, pri, contexto, projeto))!!!!
 def processarComandos(comandos) :
-  # Pegar o dia e hora de hoje, ontem e amanhã.
-  ano, mes, dia, hora, minuto = localtime(time())[:5]
-  ano, mes, dia, hora, minuto = str(ano), str(mes), str(dia), str(hora), str(minuto)
-  datas = [dia, mes, ano, hora, minuto]
-  ant, post = int(dia)-1, int(dia)+1
-  if ant == 0: ant = '30'
-  if post == 32: post = '1'
-  datas.append(str(ant))
-  datas.append(str(post))
-  for i in range(7):
-    if len(datas[i]) == 1:
-      datas[i] = '0' + datas[i]
-  today = datas[0] + datas[1] + datas[2]
-  now = datas[3] + datas[4]
-  tomorrow = datas[6] + today[2:]
-  yesterday = datas[5] + today[2:]
+  
+  today, now, tomorrow, yesterday = atual() # Pegar o dia e hora de hoje, ontem e amanhã.
   if len(comandos) > 2:
     if (comandos[2]).lower() == HOJE:
       comandos[2] = today
