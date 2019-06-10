@@ -18,6 +18,7 @@ REMOVER = 'r'
 FAZER = 'f'
 PRIORIZAR = 'p'
 LISTAR = 'l'
+AJUDA = 'h'
 HOJE = 'hoje'
 AGORA = 'agora'
 AMANHA = 'amanha'
@@ -27,8 +28,6 @@ ONTEM = 'ontem'
 #
 # printCores('Oi mundo!', RED)
 # printCores('Texto amarelo e negrito', YELLOW + BOLD)
-
-# DDMMAAAA HHMM (P) DESC @CONTEXT +PROJ 
 
 def printCores(texto, cor) :
   print(cor + texto + RESET)
@@ -126,7 +125,7 @@ def organizar(linhas):
     for i in tokens:
       desc += i + ' '
     itens.append((desc, (data, hora, pri, contexto, projeto)))
-  return itens
+  return itens 
 
 def filtragem(linhas, ordem, conteudo):
   textinho = ''
@@ -316,7 +315,7 @@ def priorizar(num, prioridade):
       printCores('Operação realizada com Sucesso!', REVERSE)
   else:
     print('Insira uma prioridade válida: A,B,C,D... ou (A),(B),(C)...')
-# (desc, (data, hora, pri, contexto, projeto))!!!!
+
 def processarComandos(comandos) :
   
   today, now, tomorrow, yesterday = atual() # Pegar o dia e hora de hoje, ontem e amanhã.
@@ -359,6 +358,18 @@ def processarComandos(comandos) :
       priorizar(comandos[2], comandos[3])
     except:
       print('N° Atividade, A-Z!')
+  elif comandos[1] == AJUDA:
+    print('''
+  Ordem:
+    (Data) (hora) (prioridade) (tarefa) (contexto) (projeto) 
+    
+  Formato aceito:
+    Data: DDMMAAAA (DiaMesAno)
+    Hora: HHMM (HoraMinuto)
+    Prioridade: (P) (A-Z)
+    Tarefa: DESC
+    Contexto: @CONTEXT
+    Projeto: +PROJ''')
   else :
     print("Comando inválido.")
 
