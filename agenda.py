@@ -154,7 +154,7 @@ def filtragem(linhas, ordem, conteudo):
       textinho += linhas[1][extras]
       return textinho
   
-def listar(filtro = 'n'):
+def listar(filtro = 'n', inter= 'n'):
   try: 
     fp = open(TODO_FILE, 'r')
     linhas = fp.readlines()
@@ -183,6 +183,12 @@ def listar(filtro = 'n'):
         if filtros[0] in linhas[1] or filtros[1] in linhas[1] or filtros[2] in linhas[1] or filtros[3] in linhas[1]:
           textos.append(filtragem(linhas, ordem, conteudo))
     
+    if inter != 'n':
+      lista = []
+      for tarefinhas in textos:
+        lista.append(tarefinhas[1:])
+      return lista
+
     for tarefinhas in textos:
       if tarefinhas[0] == 'A':
         printCores(tarefinhas[1:], YELLOW + BOLD)
@@ -373,4 +379,7 @@ def processarComandos(comandos) :
   else :
     print("Comando inválido.")
 
-processarComandos(sys.argv)
+try:
+  processarComandos(sys.argv)
+except:
+  print('Nenhum comando passado!')
