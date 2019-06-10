@@ -1,7 +1,7 @@
 from tkinter import *
 from functools import partial
 from tkinter import ttk as t # (Button, Checkbutton, Entry, Frame, Label, LabelFrame, Menubutton, PanedWindow, Radiobutton, Scale and Scrollbar)
-from agenda import listar
+from agenda import listar, fazer, remover
 
 def sair(janela):
     #registra(estoque)
@@ -16,6 +16,27 @@ def logout(janela):
     janela.destroy()
     entrada()
 
+def retirar(lista, janela):
+        for i in lista:
+                remover(i)
+        volta(janela)
+
+def finalizados():
+        try:
+                arquivo = open('done.txt', 'r')
+                linhas = arquivo.readlines()
+                arquivo.close()
+                if linhas == []:
+                        return ['Lista de atividades feitas.']
+                return linhas
+        except:
+                return ['Lista de atividades feitas.']
+
+def terminar(lista, janela):
+        for i in lista:
+                fazer(i)
+        volta(janela)
+
 def mostrar(elemento, lista):
         if elemento in lista:
                 lista.remove(elemento)
@@ -23,23 +44,68 @@ def mostrar(elemento, lista):
                 lista.append(elemento)
         print(lista)
 
+def teste(lista, tarefas, param = 'n'):
+        '''for widget in tarefas.winfo_children():
+                if widget != '.!label':
+                        widget.destroy()'''
+        linhas = listar(param, 's')
+        for i in linhas:
+                if i[0] == 'A':
+                        t.Checkbutton(tarefas, text= i[3:], style= 'Y.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                elif i[0] == 'B':
+                        t.Checkbutton(tarefas, text= i[3:], style= 'R.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                elif i[0] == 'C':
+                        t.Checkbutton(tarefas, text= i[3:], style= 'C.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                elif i[0] == 'D':
+                        t.Checkbutton(tarefas, text= i[3:], style= 'G.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                else:
+                        t.Checkbutton(tarefas, text= i[3:], style= 'TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+        return linhas
+
+def filtra(lista, tarefas, entrada):
+        teste(lista, tarefas, entrada.get())
+
 def principal():
         janela = Tk()
         window(janela)
+        janela['bg'] = 'DarkOrchid3'
         estilo = t.Style()
-        estilo.configure('TCheckbutton', background='SpringGreen2')
-        janelinha1 = Frame(janela, bg='SpringGreen3', height=10)
-        janelinha1.pack(fill= X)
-        janelinha2 = Frame(janela, bg='SpringGreen2', height=30)
-        janelinha2.pack(fill= X)
-
-        label = Label(janelinha1, text= 'LISTA', font='arial 20', bg='SpringGreen3')
-        label.pack()
+        estilo.configure('TCheckbutton', background= "peach puff")
+        estilo.configure('Y.TCheckbutton', background= "gold")
+        estilo.configure('R.TCheckbutton', background= 'orangered')
+        estilo.configure('TLabelFrame', background='DarkOrchid4')
+        estilo.configure('C.TCheckbutton', background= 'DeepSkyBlue2')
+        estilo.configure('G.TCheckbutton', background= 'SeaGreen2')
 
         lista = []
-        linhas = listar('n', 's')
-        for i in linhas:
-                t.Checkbutton(janelinha2, text= i[2:], command= partial(mostrar, i[:2], lista)).pack(fill=X)
+        topo = Frame(janela, bg='DarkOrchid4').pack(side=TOP, fill=X)
+        baixo = Frame(janela, background='DarkOrchid2').pack(fill=X)
+        label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='DarkOrchid4')
+        tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
+        botoes = Frame(tarefas)
+        enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
+        remove = t.Button(botoes, text='Remover Tarefas', command=partial(retirar, lista, janela))
+        feitos = t.LabelFrame(baixo, text='Done', height=200, width=40)
+        caixa = Listbox(feitos, bg= 'DarkOrchid2', fg='white', font='arial', width=30)
+        filtro = Entry(baixo)
+        b1 = t.Button(baixo, text='Filtrar', command= partial(filtra, lista, tarefas, filtro))
+
+        label.pack(fill=X)
+        tarefas.pack(side=LEFT)
+        feitos.pack(side=LEFT)
+        caixa.pack(side=LEFT)
+        botoes.pack(side=BOTTOM)
+        remove.pack(side=LEFT, padx=5)
+        enviar.pack(side=RIGHT)
+        filtro.pack()
+        b1.pack()
+
+        
+        linhas2 = finalizados()
+        linhas = teste(lista, tarefas, 'n')
+        for i in linhas2:
+                caixa.insert(END, i)
+        janela.geometry('400x'+'10'*len(linhas)+'+550+300')
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label):
@@ -88,7 +154,7 @@ def entrada():
 def window(janela):
     janela['bg'] = 'SpringGreen3'
     janela.title('Todo CheckList')
-    janela.geometry('300x330+550+300')
+    janela.geometry('300x330+600+350')
     janela.iconbitmap('icone.ico')
 
     # Menu

@@ -186,7 +186,7 @@ def listar(filtro = 'n', inter= 'n'):
     if inter != 'n':
       lista = []
       for tarefinhas in textos:
-        lista.append(tarefinhas[1:])
+        lista.append(tarefinhas)
       return lista
 
     for tarefinhas in textos:
