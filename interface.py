@@ -152,28 +152,30 @@ def entrada():
         janela.mainloop()
 
 def window(janela):
-    janela['bg'] = 'SpringGreen3'
-    janela.title('Todo CheckList')
-    janela.geometry('300x330+600+350')
-    janela.iconbitmap('icone.ico')
+        janela['bg'] = 'SpringGreen3'
+        janela.title('Todo CheckList')
+        janela.geometry('300x330+600+350')
+        try:
+                janela.iconbitmap('icone.ico')
+        except:
+                janela.iconbitmap('@icone.xbm')
+        # Menu
+        menu = Menu(janela)
+        opcoes = Menu(menu)
 
-    # Menu
-    menu = Menu(janela)
-    opcoes = Menu(menu)
+        opcoes.add_command(label= 'Principal', command= partial(volta, janela))
+        '''opcoes.add_separator()
+        opcoes.add_command(label= 'Banco de Dados', command= partial(banco, janela))
+        opcoes.add_command(label= 'Cadastrar', command= partial(cadastrar, janela))
+        opcoes.add_command(label= 'Buscar', command=partial(search, janela))
+        opcoes.add_command(label= 'Alterar', command=partial(alterar, janela))
+        opcoes.add_command(label= 'Deletar', command=partial(deletar, janela))
+        opcoes.add_separator()'''
+        opcoes.add_command(label= 'Logout', command= partial(logout, janela))
+        opcoes.add_command(label= 'Sair', command= partial(sair, janela))
 
-    opcoes.add_command(label= 'Principal', command= partial(volta, janela))
-    '''opcoes.add_separator()
-    opcoes.add_command(label= 'Banco de Dados', command= partial(banco, janela))
-    opcoes.add_command(label= 'Cadastrar', command= partial(cadastrar, janela))
-    opcoes.add_command(label= 'Buscar', command=partial(search, janela))
-    opcoes.add_command(label= 'Alterar', command=partial(alterar, janela))
-    opcoes.add_command(label= 'Deletar', command=partial(deletar, janela))
-    opcoes.add_separator()'''
-    opcoes.add_command(label= 'Logout', command= partial(logout, janela))
-    opcoes.add_command(label= 'Sair', command= partial(sair, janela))
-
-    menu.add_cascade(label= 'Opções', menu= opcoes)
-    janela.config(menu= menu)
+        menu.add_cascade(label= 'Opções', menu= opcoes)
+        janela.config(menu= menu)
 
 usuarios = {'admin':'admin'}
 entrada()
