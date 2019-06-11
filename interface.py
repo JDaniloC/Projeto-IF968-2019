@@ -1,8 +1,8 @@
-from tkinter import *
 from functools import partial
 from tkinter import ttk as t
-from agenda import listar, fazer, remover
+from programa import listar, fazer, remover
 import platform
+from tkinter import *
 
 def sair(janela):
     janela.destroy()
@@ -25,11 +25,12 @@ def finalizados():
                 arquivo = open('done.txt', 'r')
                 linhas = arquivo.readlines()
                 arquivo.close()
+                maior = len(max(linhas))
                 if linhas == []:
                         return ['Lista de atividades feitas.']
-                return linhas
+                return linhas, maior
         except:
-                return ['Lista de atividades feitas.']
+                return ['Lista de atividades feitas.'], 6
 
 def terminar(lista, janela):
         for i in lista:
@@ -42,10 +43,12 @@ def mostrar(elemento, lista):
         else:
                 lista.append(elemento)
 
-def teste(lista, tarefas, param = 'n'):
+def filtragem(lista, tarefas, param = 'n'):
         for widget in tarefas.winfo_children():
                 widget.destroy()
         linhas = listar(param, 's')
+        try: maior = len(max(linhas))
+        except: maior = 1
         for i in linhas:
                 if i[0] == 'A':
                         t.Checkbutton(tarefas, text= i[3:], style= 'Y.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
@@ -57,33 +60,32 @@ def teste(lista, tarefas, param = 'n'):
                         t.Checkbutton(tarefas, text= i[3:], style= 'G.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
                 else:
                         t.Checkbutton(tarefas, text= i[3:], style= 'TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-        return linhas
+        return linhas, maior
 
-def filtra(lista, tarefas, entrada):
-        teste(lista, tarefas, entrada.get())
+def filtra(lista, tarefas, entrada): filtragem(lista, tarefas, entrada.get())
 
 def principal():
         janela = Tk()
         window(janela)
-        janela['bg'] = 'DarkOrchid3'
+        janela['bg'] = 'PaleGreen3'
         estilo = t.Style()
         estilo.configure('TCheckbutton', background= "peach puff")
         estilo.configure('Y.TCheckbutton', background= "gold")
         estilo.configure('R.TCheckbutton', background= 'orangered')
-        estilo.configure('TLabelFrame', background='DarkOrchid4')
+        estilo.configure('TLabelFrame', background='SpringGreen4')
         estilo.configure('C.TCheckbutton', background= 'DeepSkyBlue2')
         estilo.configure('G.TCheckbutton', background= 'SeaGreen2')
 
         lista = []
-        topo = Frame(janela, bg='DarkOrchid4').pack(side=TOP, fill=X)
-        baixo = Frame(janela, background='DarkOrchid2').pack(fill=X)
-        label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='DarkOrchid4')
+        topo = Frame(janela, bg='SpringGreen4').pack(side=TOP, fill=X)
+        baixo = Frame(janela, background='PaleGreen2').pack(fill=X)
+        label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='SpringGreen4')
         tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
         feitos = t.LabelFrame(baixo, text='Done', width=40)
         botoes = Frame(topo)
         enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
         remove = t.Button(botoes, text='Remover Tarefas', command=partial(retirar, lista, janela))
-        caixa = Listbox(feitos, bg= 'DarkOrchid2', fg='white', font='arial', width=30)
+        caixa = Listbox(feitos, bg= 'PaleGreen2', fg='black', font='verdana 8 bold', width=30)
         filtro = Entry(botoes, width=37)
         pesquisar = t.Button(botoes, text='Filtrar', command= partial(filtra, lista, tarefas, filtro))
 
@@ -94,15 +96,16 @@ def principal():
         pesquisar.pack(side=LEFT)
         enviar.pack(side=LEFT)
         tarefas.pack(side=LEFT)
-        feitos.pack(side=LEFT, padx= 1, fill=Y)
-        caixa.pack(side=LEFT, fill= Y)
+        feitos.pack(side=LEFT, padx= 1)
+        caixa.pack(side=LEFT)
         
-        linhas2 = finalizados()
-        linhas = teste(lista, tarefas, 'n')
+        linhas2, tamanho = finalizados()
+        linhas, tamanho2 = filtragem(lista, tarefas, 'n')
         for i in linhas2:
                 caixa.insert(END, i)
-        caixa['height'] = 1*len(linhas)
-        janela.geometry('500x'+'10'*len(linhas)+'+550+300')
+        caixa['height'] = len(linhas)+11
+        caixa['width'] = tamanho*5
+        janela.geometry('10'*(tamanho+tamanho2)+'x'+'10'*len(linhas)+'+550+300')
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label):
