@@ -1,10 +1,10 @@
 from tkinter import *
 from functools import partial
-from tkinter import ttk as t # (Button, Checkbutton, Entry, Frame, Label, LabelFrame, Menubutton, PanedWindow, Radiobutton, Scale and Scrollbar)
+from tkinter import ttk as t
 from agenda import listar, fazer, remover
+import platform
 
 def sair(janela):
-    #registra(estoque)
     janela.destroy()
 
 def volta(janela):
@@ -12,7 +12,6 @@ def volta(janela):
     principal()
 
 def logout(janela):
-    #registra(estoque)
     janela.destroy()
     entrada()
 
@@ -42,12 +41,10 @@ def mostrar(elemento, lista):
                 lista.remove(elemento)
         else:
                 lista.append(elemento)
-        print(lista)
 
 def teste(lista, tarefas, param = 'n'):
-        '''for widget in tarefas.winfo_children():
-                if widget != '.!label':
-                        widget.destroy()'''
+        for widget in tarefas.winfo_children():
+                widget.destroy()
         linhas = listar(param, 's')
         for i in linhas:
                 if i[0] == 'A':
@@ -82,30 +79,30 @@ def principal():
         baixo = Frame(janela, background='DarkOrchid2').pack(fill=X)
         label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='DarkOrchid4')
         tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
-        botoes = Frame(tarefas)
+        feitos = t.LabelFrame(baixo, text='Done', width=40)
+        botoes = Frame(topo)
         enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
         remove = t.Button(botoes, text='Remover Tarefas', command=partial(retirar, lista, janela))
-        feitos = t.LabelFrame(baixo, text='Done', height=200, width=40)
         caixa = Listbox(feitos, bg= 'DarkOrchid2', fg='white', font='arial', width=30)
-        filtro = Entry(baixo)
-        b1 = t.Button(baixo, text='Filtrar', command= partial(filtra, lista, tarefas, filtro))
+        filtro = Entry(botoes, width=37)
+        pesquisar = t.Button(botoes, text='Filtrar', command= partial(filtra, lista, tarefas, filtro))
 
         label.pack(fill=X)
-        tarefas.pack(side=LEFT)
-        feitos.pack(side=LEFT)
-        caixa.pack(side=LEFT)
-        botoes.pack(side=BOTTOM)
+        botoes.pack(side=TOP)
         remove.pack(side=LEFT, padx=5)
-        enviar.pack(side=RIGHT)
-        filtro.pack()
-        b1.pack()
-
+        filtro.pack(side=LEFT)
+        pesquisar.pack(side=LEFT)
+        enviar.pack(side=LEFT)
+        tarefas.pack(side=LEFT)
+        feitos.pack(side=LEFT, padx= 1, fill=Y)
+        caixa.pack(side=LEFT, fill= Y)
         
         linhas2 = finalizados()
         linhas = teste(lista, tarefas, 'n')
         for i in linhas2:
                 caixa.insert(END, i)
-        janela.geometry('400x'+'10'*len(linhas)+'+550+300')
+        caixa['height'] = 1*len(linhas)
+        janela.geometry('500x'+'10'*len(linhas)+'+550+300')
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label):
@@ -130,8 +127,8 @@ def entrada():
         estilo.configure('TButton', background='SpringGreen3')
 
         Label(janela, text='ACESSO', font='Georgia 20 bold', bg='SpringGreen3', fg='white').place(x=90, y=10)
-        t.Label(janela, text='Login:', width=8, foreground='white', font='10').place(x=5, y=80) # bg='SpringGreen3',
-        t.Label(janela, text='Senha:', width=8, foreground='white', font='10').place(x=5, y=120) # bg='SpringGreen3',
+        t.Label(janela, text='Login:', width=8, foreground='white', font='10').place(x=5, y=80)
+        t.Label(janela, text='Senha:', width=8, foreground='white', font='10').place(x=5, y=120)
 
         label = t.Label(janela)
         login = t.Entry(janela, width= 30)
@@ -155,22 +152,16 @@ def window(janela):
         janela['bg'] = 'SpringGreen3'
         janela.title('Todo CheckList')
         janela.geometry('300x330+600+350')
-        try:
-                janela.iconbitmap('icone.ico')
-        except:
+        if platform.system() == 'Windows':
+                janela.iconbitmap("icone.ico")
+        else:
                 janela.iconbitmap('@icone.xbm')
-        # Menu
+        
         menu = Menu(janela)
         opcoes = Menu(menu)
 
         opcoes.add_command(label= 'Principal', command= partial(volta, janela))
-        '''opcoes.add_separator()
-        opcoes.add_command(label= 'Banco de Dados', command= partial(banco, janela))
-        opcoes.add_command(label= 'Cadastrar', command= partial(cadastrar, janela))
-        opcoes.add_command(label= 'Buscar', command=partial(search, janela))
-        opcoes.add_command(label= 'Alterar', command=partial(alterar, janela))
-        opcoes.add_command(label= 'Deletar', command=partial(deletar, janela))
-        opcoes.add_separator()'''
+        opcoes.add_separator()
         opcoes.add_command(label= 'Logout', command= partial(logout, janela))
         opcoes.add_command(label= 'Sair', command= partial(sair, janela))
 
@@ -178,4 +169,3 @@ def window(janela):
         janela.config(menu= menu)
 
 usuarios = {'admin':'admin'}
-entrada()

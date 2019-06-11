@@ -1,5 +1,6 @@
 import sys
 from datacao import atual
+from interface import *
 
 TODO_FILE = 'todo.txt'
 DONE_FILE = 'done.txt'
@@ -23,6 +24,7 @@ HOJE = 'hoje'
 AGORA = 'agora'
 AMANHA = 'amanha'
 ONTEM = 'ontem'
+INTERFACE = 'i'
 
 # Imprime texto com cores. Por exemplo, para imprimir "Oi mundo!" em vermelho, basta usar
 #
@@ -376,6 +378,8 @@ def processarComandos(comandos) :
     Tarefa: DESC
     Contexto: @CONTEXT
     Projeto: +PROJ''')
+  elif comandos[1] == INTERFACE:
+    entrada()
   else :
     print("Comando inválido.")
 
