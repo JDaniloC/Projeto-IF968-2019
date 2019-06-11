@@ -1,6 +1,6 @@
 import sys
-from time import time
-from time import localtime
+from datacao import atual
+from interface import *
 
 TODO_FILE = 'todo.txt'
 DONE_FILE = 'done.txt'
@@ -19,17 +19,17 @@ REMOVER = 'r'
 FAZER = 'f'
 PRIORIZAR = 'p'
 LISTAR = 'l'
+AJUDA = 'h'
 HOJE = 'hoje'
 AGORA = 'agora'
 AMANHA = 'amanha'
 ONTEM = 'ontem'
+INTERFACE = 'i'
 
 # Imprime texto com cores. Por exemplo, para imprimir "Oi mundo!" em vermelho, basta usar
 #
 # printCores('Oi mundo!', RED)
 # printCores('Texto amarelo e negrito', YELLOW + BOLD)
-
-# DDMMAAAA HHMM (P) DESC @CONTEXT +PROJ 
 
 def printCores(texto, cor) :
   print(cor + texto + RESET)
@@ -127,7 +127,7 @@ def organizar(linhas):
     for i in tokens:
       desc += i + ' '
     itens.append((desc, (data, hora, pri, contexto, projeto)))
-  return itens
+  return itens 
 
 def filtragem(linhas, ordem, conteudo):
   textinho = ''
@@ -156,7 +156,7 @@ def filtragem(linhas, ordem, conteudo):
       textinho += linhas[1][extras]
       return textinho
   
-def listar(filtro = 'n'):
+def listar(filtro = 'n', inter= 'n'):
   try: 
     fp = open(TODO_FILE, 'r')
     linhas = fp.readlines()
@@ -185,6 +185,12 @@ def listar(filtro = 'n'):
         if filtros[0] in linhas[1] or filtros[1] in linhas[1] or filtros[2] in linhas[1] or filtros[3] in linhas[1]:
           textos.append(filtragem(linhas, ordem, conteudo))
     
+    if inter != 'n':
+      lista = []
+      for tarefinhas in textos:
+        lista.append(tarefinhas)
+      return lista
+
     for tarefinhas in textos:
       if tarefinhas[0] == 'A':
         printCores(tarefinhas[1:], YELLOW + BOLD)
@@ -317,24 +323,10 @@ def priorizar(num, prioridade):
       printCores('Operação realizada com Sucesso!', REVERSE)
   else:
     print('Insira uma prioridade válida: A,B,C,D... ou (A),(B),(C)...')
-# (desc, (data, hora, pri, contexto, projeto))!!!!
+
 def processarComandos(comandos) :
-  # Pegar o dia e hora de hoje, ontem e amanhã.
-  ano, mes, dia, hora, minuto = localtime(time())[:5]
-  ano, mes, dia, hora, minuto = str(ano), str(mes), str(dia), str(hora), str(minuto)
-  datas = [dia, mes, ano, hora, minuto]
-  ant, post = int(dia)-1, int(dia)+1
-  if ant == 0: ant = '30'
-  if post == 32: post = '1'
-  datas.append(str(ant))
-  datas.append(str(post))
-  for i in range(7):
-    if len(datas[i]) == 1:
-      datas[i] = '0' + datas[i]
-  today = datas[0] + datas[1] + datas[2]
-  now = datas[3] + datas[4]
-  tomorrow = datas[6] + today[2:]
-  yesterday = datas[5] + today[2:]
+  
+  today, now, tomorrow, yesterday = atual() # Pegar o dia e hora de hoje, ontem e amanhã.
   if len(comandos) > 2:
     if (comandos[2]).lower() == HOJE:
       comandos[2] = today
@@ -374,7 +366,24 @@ def processarComandos(comandos) :
       priorizar(comandos[2], comandos[3])
     except:
       print('N° Atividade, A-Z!')
+  elif comandos[1] == AJUDA:
+    print('''
+  Ordem:
+    (Data) (hora) (prioridade) (tarefa) (contexto) (projeto) 
+    
+  Formato aceito:
+    Data: DDMMAAAA (DiaMesAno)
+    Hora: HHMM (HoraMinuto)
+    Prioridade: (P) (A-Z)
+    Tarefa: DESC
+    Contexto: @CONTEXT
+    Projeto: +PROJ''')
+  elif comandos[1] == INTERFACE:
+    entrada()
   else :
     print("Comando inválido.")
 
-processarComandos(sys.argv)
+try:
+  processarComandos(sys.argv)
+except:
+  print('Nenhum comando passado!')
