@@ -1,2 +1,2 @@
 # ProjetoP1
-Todo.txt
+Primeira fase do projeto, sem interface e sem modularização.
