@@ -20,6 +20,7 @@ def printCores(texto, cor) :
 
 def adicionar(descricao, extras):
   if descricao  == '' :
+    print('Nada adicionado: Sem Descrição!')
     return False
   else:
     novaAtividade = ''
@@ -88,28 +89,15 @@ def organizar(linhas):
     tokens = l.split() 
     if dataValida(tokens[0]):
       data = tokens.pop(0)
-      if horaValida(tokens[0]):
-        hora = tokens.pop(0)
-        if prioridadeValida(tokens[0]):
-          pri = (tokens.pop(0)).upper()
-      elif prioridadeValida(tokens[0]):
-        pri = (tokens.pop(0)).upper()
-    elif horaValida(tokens[0]):
+    if horaValida(tokens[0]):
       hora = tokens.pop(0)
-      if prioridadeValida(tokens[0]):
-        pri = (tokens.pop(0)).upper()
-    elif prioridadeValida(tokens[0]):
+    if prioridadeValida(tokens[0]):
       pri = (tokens.pop(0)).upper()
-    if tokens != []:
-      if projetoValido(tokens[-1]):
-        projeto = tokens.pop(-1)
-        if tokens != []:
-          if contextoValido(tokens[-1]):
-            contexto = tokens.pop(-1)
-      elif contextoValido(tokens[-1]):
-        contexto = tokens.pop(-1)
-    for i in tokens:
-      desc += i + ' '
+    if tokens != [] and projetoValido(tokens[-1]):
+      projeto = tokens.pop(-1)
+    if tokens != [] and contextoValido(tokens[-1]):
+      contexto = tokens.pop(-1)
+    desc = ' '.join(tokens)
     itens.append((desc, (data, hora, pri, contexto, projeto)))
   return itens 
 

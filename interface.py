@@ -30,7 +30,7 @@ def finalizados():
                         return ['Lista de atividades feitas.']
                 return linhas, maior
         except:
-                return ['Lista de atividades feitas.'], 6
+                return ['Lista de atividades feitas.'], 36
 
 def terminar(lista, janela):
         for i in lista:
@@ -97,15 +97,23 @@ def principal():
         enviar.pack(side=LEFT)
         tarefas.pack(side=LEFT)
         feitos.pack(side=LEFT, padx= 1)
-        caixa.pack(side=LEFT)
+        caixa.pack(side=LEFT, fill=X)
         
         linhas2, tamanho = finalizados()
         linhas, tamanho2 = filtragem(lista, tarefas, 'n')
         for i in linhas2:
                 caixa.insert(END, i)
         caixa['height'] = len(linhas)+11
-        caixa['width'] = tamanho*5
-        janela.geometry('10'*(tamanho+tamanho2)+'x'+'10'*len(linhas)+'+550+300')
+        if ((tamanho+tamanho2)*10) > 505: tamanho = (tamanho+tamanho2)*10
+        else: tamanho = 505
+        if len(linhas) != 0 and len(linhas2) != 0:
+                if len(linhas) > len(linhas2):
+                        tamanho2 = len(linhas)
+                else:
+                        tamanho2 = len(linhas2)
+        else: tamanho2 = 10
+        print(tamanho, tamanho2)
+        janela.geometry(str(tamanho)+'x'+'10'*tamanho2+'+550+300')
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label):
