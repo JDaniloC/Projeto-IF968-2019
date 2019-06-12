@@ -16,7 +16,9 @@ def logout(janela):
     entrada()
 
 def retirar(lista, janela):
+        print (lista)
         for i in lista:
+                print(i)
                 remover(i)
         volta(janela)
 
@@ -33,8 +35,14 @@ def finalizados():
                 return ['Lista de atividades feitas.'], 36
 
 def terminar(lista, janela):
-        for i in lista:
-                fazer(i)
+        for i in range(len(lista)):
+                print(lista[i])
+                if i == 0:
+                        fazer(lista[i])
+                elif i == len(lista):
+                        fazer(str(int(lista[i])-2))
+                else:
+                        fazer(str(int(lista[i])-1))
         volta(janela)
 
 def mostrar(elemento, lista):
@@ -81,38 +89,40 @@ def principal():
         baixo = Frame(janela, background='PaleGreen2').pack(fill=X)
         label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='SpringGreen4')
         tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
-        feitos = t.LabelFrame(baixo, text='Done', width=40)
         botoes = Frame(topo)
         enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
         remove = t.Button(botoes, text='Remover Tarefas', command=partial(retirar, lista, janela))
-        caixa = Listbox(feitos, bg= 'PaleGreen2', fg='black', font='verdana 8 bold', width=30)
         filtro = Entry(botoes, width=37)
         pesquisar = t.Button(botoes, text='Filtrar', command= partial(filtra, lista, tarefas, filtro))
+        feitos = t.LabelFrame(baixo, text='Done', width=40)
+        scroll = Scrollbar(feitos)
+        caixa = Listbox(feitos, bg= 'PaleGreen2', fg='black', font='verdana 8 bold', width=30, yscrollcommand=scroll.set)
+        scroll.config(command= caixa.yview)
 
-        label.pack(fill=X)
-        botoes.pack(side=TOP)
-        remove.pack(side=LEFT, padx=5)
-        filtro.pack(side=LEFT)
-        pesquisar.pack(side=LEFT)
-        enviar.pack(side=LEFT)
-        tarefas.pack(side=LEFT)
-        feitos.pack(side=LEFT, padx= 1)
-        caixa.pack(side=LEFT, fill=X)
+        label.pack(fill= X)
+        botoes.pack(side= TOP)
+        remove.pack(side= LEFT, padx= 5)
+        filtro.pack(side= LEFT)
+        pesquisar.pack(side= LEFT)
+        enviar.pack(side= LEFT)
+        tarefas.pack(side= LEFT)
+        feitos.pack(side= LEFT, padx= 1)
+        scroll.pack(side= RIGHT, fill= Y)
+        caixa.pack(side= LEFT, fill= X)
         
         linhas2, tamanho = finalizados()
         linhas, tamanho2 = filtragem(lista, tarefas, 'n')
         for i in linhas2:
                 caixa.insert(END, i)
         caixa['height'] = len(linhas)+11
+
         if ((tamanho+tamanho2)*10) > 505: tamanho = (tamanho+tamanho2)*10
         else: tamanho = 505
         if len(linhas) != 0 and len(linhas2) != 0:
-                if len(linhas) > len(linhas2):
-                        tamanho2 = 100+(len(linhas)*23)
-                else:
-                        tamanho2 = 100+(len(linhas2)*23)
+                if len(linhas) > len(linhas2): tamanho2 = 100+(len(linhas)*23)
+                else: tamanho2 = 100+(len(linhas2)*23)
         else: tamanho2 = 260
-        print(tamanho, tamanho2)
+
         janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+550+300')
         janela.mainloop()
 
