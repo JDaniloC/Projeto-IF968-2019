@@ -108,12 +108,12 @@ def principal():
         else: tamanho = 505
         if len(linhas) != 0 and len(linhas2) != 0:
                 if len(linhas) > len(linhas2):
-                        tamanho2 = len(linhas)
+                        tamanho2 = 100+(len(linhas)*23)
                 else:
-                        tamanho2 = len(linhas2)
-        else: tamanho2 = 10
+                        tamanho2 = 100+(len(linhas2)*23)
+        else: tamanho2 = 260
         print(tamanho, tamanho2)
-        janela.geometry(str(tamanho)+'x'+'10'*tamanho2+'+550+300')
+        janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+550+300')
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label):
