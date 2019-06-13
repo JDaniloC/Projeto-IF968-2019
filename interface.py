@@ -16,10 +16,9 @@ def logout(janela):
     entrada()
 
 def retirar(lista, janela):
-        print (lista)
-        for i in lista:
-                print(i)
-                remover(i)
+        for i in range(len(lista)):
+                menos = len(lista[:i])
+                remover(str(int(lista[i])-menos))
         volta(janela)
 
 def finalizados():
@@ -35,14 +34,10 @@ def finalizados():
                 return ['Lista de atividades feitas.'], 36
 
 def terminar(lista, janela):
+        lista.sort()
         for i in range(len(lista)):
-                print(lista[i])
-                if i == 0:
-                        fazer(lista[i])
-                elif i == len(lista):
-                        fazer(str(int(lista[i])-2))
-                else:
-                        fazer(str(int(lista[i])-1))
+                menos = len(lista[:i])
+                fazer(str(int(lista[i])-menos))
         volta(janela)
 
 def mostrar(elemento, lista):
