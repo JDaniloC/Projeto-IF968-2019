@@ -9,8 +9,9 @@
 
 *Leia sobre o [projeto](https://docs.google.com/a/cin.ufpe.br/viewer?a=v&pid=sites&srcid=Y2luLnVmcGUuYnJ8aWY5NjhzaXxneDozNzU3OWRjNDFiZjdiNTAz) para saber o desenvolvimento.*
 
-<p align="left">
-  <image width=49%, align = 'left', src="./add.gif"/> <image width=49%, align="right", src="./list.gif"/>
+<p float="left">
+  <image width=49%, src="./add.gif"/> 
+  <image width=49%, src="./list.gif"/>
 </p>
 
 ## Obtenção do Script
