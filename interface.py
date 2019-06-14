@@ -51,18 +51,22 @@ def filtragem(lista, tarefas, param = 'n'):
         linhas = listar(param, 's')
         try: maior = len(max(linhas))
         except: maior = 1
-        for i in linhas:
-                if i[0] == 'A':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'Y.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                elif i[0] == 'B':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'R.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                elif i[0] == 'C':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'C.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                elif i[0] == 'D':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'G.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                else:
-                        t.Checkbutton(tarefas, text= i[3:], style= 'TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-        return linhas, maior
+        if type(linhas) == list:
+                for i in linhas:
+                        if i[0] == 'A':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'Y.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        elif i[0] == 'B':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'R.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        elif i[0] == 'C':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'C.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        elif i[0] == 'D':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'G.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        else:
+                                t.Checkbutton(tarefas, text= i[3:], style= 'TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                return linhas, maior
+        else:
+                t.Checkbutton(tarefas, text= 'Nenhuma tarefa', style= 'Y.TCheckbutton').pack(fill=X)
+                return [], 1
 
 def filtra(lista, tarefas, entrada): filtragem(lista, tarefas, entrada.get())
 
