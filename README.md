@@ -9,8 +9,8 @@
 
 *Leia sobre o [projeto](https://docs.google.com/a/cin.ufpe.br/viewer?a=v&pid=sites&srcid=Y2luLnVmcGUuYnJ8aWY5NjhzaXxneDozNzU3OWRjNDFiZjdiNTAz) para saber o desenvolvimento.*
 
-<p align="center">
-<image width=100%, src="./list.gif">
+<p align="left">
+  <image width=49%, align = 'left', src="./add.gif"/> <image width=49%, align="right", src="./list.gif"/>
 </p>
 
 ## Obtenção do Script
@@ -29,10 +29,6 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 #### Comandos
 
 > Comando adicionar: a
-
-<p align="center">
-<image align = 'left', src="./add.gif">
-</p>
 
 ```shell
 >> python agenda.py a (data) (hora) (prioridade) (descrição) (contexto) (projeto)
@@ -119,7 +115,7 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 - [ ] *Completamente compatível com linux.*
 
 <p align="center">
-<image width=100%, src="./new.gif">
+<image src="./new.gif">
 </p>
 
 ## Contribuidores
