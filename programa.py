@@ -84,7 +84,7 @@ def soDigitos(numero) :
 def organizar(linhas):
   itens = []
   for l in linhas:
-    data, hora, pri, desc, contexto, projeto = '', '', '', '', '', ''
+    data, hora, pri, desc = '', '', '', '',
     l = l.strip()
     tokens = l.split() 
     if dataValida(tokens[0]):
@@ -93,13 +93,17 @@ def organizar(linhas):
       hora = tokens.pop(0)
     if prioridadeValida(tokens[0]):
       pri = (tokens.pop(0)).upper()
-    if tokens != [] and projetoValido(tokens[-1]):
-      projeto = tokens.pop(-1)
-    if tokens != [] and contextoValido(tokens[-1]):
-      contexto = tokens.pop(-1)
+    projcont = ()
+    while tokens != [] and (projetoValido(tokens[-1]) or contextoValido(tokens[-1])):
+      if tokens != [] and projetoValido(tokens[-1]):
+        projcont += tokens.pop(-1),
+      if tokens != [] and contextoValido(tokens[-1]):
+        projcont += tokens.pop(-1),
+    while len(projcont) < 2: projcont += '',
     desc = ' '.join(tokens)
-    itens.append((desc, (data, hora, pri, contexto, projeto)))
-  return itens 
+    extras = (data, hora, pri) + projcont
+    itens.append((desc, extras))
+  return itens
 
 def filtragem(linhas, ordem, conteudo):
   textinho = ''
@@ -113,7 +117,7 @@ def filtragem(linhas, ordem, conteudo):
   else:
     textinho += 'N'
   textinho += str(ordem[conteudo.index(linhas)]) + ' '
-  for extras in range(5):
+  for extras in range(len(linhas[1])):
     if extras == 0 and linhas[1][0] != '':
       textinho += linhas[1][0][:2] + '/' + linhas[1][0][2:4] + '/' + linhas[1][0][4:] + ' '
     elif extras == 1 and linhas[1][1] != '':
@@ -124,9 +128,9 @@ def filtragem(linhas, ordem, conteudo):
       textinho += linhas[0] + ' '
       if linhas[1][extras] != '':
         textinho += linhas[1][extras] + ' '
-    elif extras == 4:
-      textinho += linhas[1][extras]
-      return textinho
+    else: 
+      if linhas[1][extras] != '': textinho += linhas[1][extras] + ' '
+  return textinho
   
 def listar(filtro = 'n', inter= 'n'):
   try: 
@@ -152,9 +156,9 @@ def listar(filtro = 'n', inter= 'n'):
       for linhas in conteudo:
         textos.append(filtragem(linhas, ordem, conteudo))
     else:
-      filtros = ['@'+filtro, '+'+filtro, '('+filtro.upper()+')', filtro]
+      filtros = ['@'+filtro, '+'+filtro, '('+filtro.upper()+')', filtro, filtro.upper()]
       for linhas in conteudo:
-        if filtros[0] in linhas[1] or filtros[1] in linhas[1] or filtros[2] in linhas[1] or filtros[3] in linhas[1]:
+        if len([x for x in linhas[1] if x in filtros]) > 0:
           textos.append(filtragem(linhas, ordem, conteudo))
     
     if inter != 'n':
@@ -174,6 +178,7 @@ def listar(filtro = 'n', inter= 'n'):
         printCores(tarefinhas[1:], GREEN)
       else:
         print(tarefinhas[1:])
+    print(f'--\nTODO: Mostrando {len(textos)} de {len(conteudo)}')
 
   except IOError as err:
     print("Não foi possível escrever para o arquivo " + TODO_FILE)
@@ -218,7 +223,7 @@ def ordenarPorDataHora(itens):
         semData[x+1] = aux
   itens = itens + semData + semHora
   return itens
-   
+
 def ordenarPorPrioridade(itens):
   vazio = []
   i = 0

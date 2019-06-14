@@ -7,17 +7,16 @@
 
 >> "O objetivo deste trabalho é praticar a escrita de funções e programas em Python, em particular, programas envolvendo strings, ~~vetores~~, listas, tuplas, dicionários e arquivos. Além disso, é a primeira oportunidade que os alunos têm, no contexto do curso de *Sistemas de Informação*, de desenvolver um sistema não-trivial, ainda que simples." ~[Fernando Castor](https://sites.google.com/a/cin.ufpe.br/castor/).
 
-<p align="center">
-<image width=100%, src="./example.gif">
-</p>
-
 *Leia sobre o [projeto](https://docs.google.com/a/cin.ufpe.br/viewer?a=v&pid=sites&srcid=Y2luLnVmcGUuYnJ8aWY5NjhzaXxneDozNzU3OWRjNDFiZjdiNTAz) para saber o desenvolvimento.*
 
+<p align="center">
+<image width=100%, src="./list.gif">
+</p>
 
 ## Obtenção do Script
 
 ### Download
-Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressione Ctrl+Shift+P e digite *"Git clone"* e cole *https://github.com/Tiodonilo/ProjetoP1.git* para salvar em um repositório local.
+Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressione Ctrl+Shift+P e digite *"Git clone"* e cole *https://github.com/Tiodonilo/Projeto-IF968-2019.git* para salvar em um repositório local.
 
 ### Instruções e Comandos
 
@@ -30,6 +29,10 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 #### Comandos
 
 > Comando adicionar: a
+
+<p align="center">
+<image align = 'left', src="./add.gif">
+</p>
 
 ```shell
 >> python agenda.py a (data) (hora) (prioridade) (descrição) (contexto) (projeto)
@@ -62,7 +65,7 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 ```shell
 >> python agenda.py r (index da tarefa)
 ```
-###### Irá remover a tarefa do todo.txt, deve ser colocado apenas um indice por vez, números inteiros, sem parênteses.
+###### Irá remover a tarefa do todo.txt, pode vários indices separados por espaço, números inteiros, sem parênteses.
 
 > Comando fazer: f
 
@@ -71,7 +74,7 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 ```
 ###### Irá retirar a tarefa do todo.txt e move-lo para o done.txt. Mesmas regras do comando R.
 
-> Comando prioridade: f
+> Comando prioridade: p
 
 ```shell
 >> python agenda.py p (prioridade) (indice da tarefa)
@@ -101,15 +104,23 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 
 - [x] *[README.md](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/README.md) atualizado!*
 
-- [x] *Help adicionado aos comandos!*
+- [x] *Help adicionado aos comandos, e várias adições e modificações!*
 
 - [x] *Modularização da [datação](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/datacao.py) (ontem, hoje, amanhã) e do [programa](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/programa.py) principal.*
 
-- [x] *Criação de uma [interface](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/interface.py) gráfica funcional.*
+- [x] *Criação de uma [interface](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/interface.py) gráfica funcional, com ícone próprio.*
 
 - [x] *Correção de bugs na interface, datação e afins.*
 
-- [ ] *Possibilidade de deletar/finalizar várias tarefas em uma só linha no Shell.*
+- [x] *Possibilidade de deletar/finalizar várias tarefas em uma só linha no Shell e adicionar mais de um projeto/pesquisa por comando!*
+
+- [x] *Linhas de código mais enxutas com Docstrings!*
+
+- [ ] *Completamente compatível com linux.*
+
+<p align="center">
+<image width=100%, src="./new.gif">
+</p>
 
 ## Contribuidores
 José Danilo, Centro de Informática, UFPE.

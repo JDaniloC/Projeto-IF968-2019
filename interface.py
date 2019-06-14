@@ -109,7 +109,7 @@ def principal():
         for i in linhas2:
                 caixa.insert(END, i)
         caixa['height'] = len(linhas)+11
-
+        caixa['width'] = tamanho
         if ((tamanho+tamanho2)*10) > 505: tamanho = (tamanho+tamanho2)*10
         else: tamanho = 505
         if len(linhas) != 0 and len(linhas2) != 0:
@@ -120,8 +120,8 @@ def principal():
         janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+550+300')
         janela.mainloop()
 
-def acesso(usuario, senha, janela, label):
-    global usuarios # Não precisa ser global
+def acesso(usuario, senha, janela, label): # Foi retirado a possibilidade de se criar novos users.
+    usuarios = {'admin':'admin'}
     if usuario.get() in usuarios:
             if usuarios[usuario.get()] == senha.get():
                     volta(janela)
@@ -182,5 +182,3 @@ def window(janela):
 
         menu.add_cascade(label= 'Opções', menu= opcoes)
         janela.config(menu= menu)
-
-usuarios = {'admin':'admin'}

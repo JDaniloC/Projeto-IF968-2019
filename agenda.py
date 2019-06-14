@@ -1,7 +1,7 @@
 import sys
 from datacao import atual
 from interface import entrada as inter
-from programa import organizar, adicionar, listar
+from programa import organizar, adicionar, listar, fazer, remover, priorizar
 
 ADICIONAR = 'a'
 REMOVER = 'r'
@@ -9,14 +9,32 @@ FAZER = 'f'
 PRIORIZAR = 'p'
 LISTAR = 'l'
 AJUDA = 'h'
+INTERFACE = 'i'
 HOJE = 'hoje'
 AGORA = 'agora'
 AMANHA = 'amanha'
 ONTEM = 'ontem'
-INTERFACE = 'i'
+
 
 def processarComandos(comandos) :
+  '''
+  -> Direciona a outras funções a partir dos seguintes comandos:
+  ADICIONAR = a (adiciona uma nova task).
+  REMOVER   = r (remove alguma task pelo index).
+  FAZER     = f (remove a task do todo.txt e coloca no done.txt).
+  PRIORIZAR = p (insere/modifica alguma prioridade pelo index).
+  LISTAR    = l (mostra as tasks do todo.txt).
+  AJUDA     = h (Mostra como proceder em cada função).
+  INTERFACE = i (Acelera processos).
   
+  -> Também aceita datação dinamica, atraves dos seguintes comandos:
+  HOJE   = hoje   (O dia de hoje DDMMAAAA).
+  AGORA  = agora  (A hora e minuto do momento HHMM).
+  AMANHA = amanha (O dia de amanha DDMMAAAA).
+  ONTEM  = ontem  (O dia de ontem DDMMAAAA).
+  
+  Sem return.
+  '''
   today, now, yesterday, tomorrow = atual() # Pegar o dia e hora de hoje, ontem e amanhã.
   if len(comandos) > 2:
     if (comandos[2]).lower() == HOJE:
@@ -44,12 +62,26 @@ def processarComandos(comandos) :
       listar()
   elif comandos[1] == REMOVER:
     try:
-      remover(comandos[2])   
+      if len(comandos[2:]) > 1:
+        lista = comandos[2:]
+        lista = [str(x) for x in sorted([int(y) for y in lista], reverse=True)]
+        for elemento in lista:
+          remover(elemento)
+      else:
+        remover(comandos[2])   
     except:
       print('ERROR: Digite um número! Válido!')
   elif comandos[1] == FAZER:
     try:
-      fazer(comandos[2])
+      if len(comandos[2:]) > 1:
+        lista = comandos[2:]
+        lista = [str(x) for x in sorted([int(y) for y in lista], reverse=True)]
+        for elemento in lista:
+          print(elemento)
+          fazer(elemento)
+      else:
+        print('ELSE')
+        fazer(comandos[2])
     except:
       print('ERROR: Digite um número válido!')
   elif comandos[1] == PRIORIZAR:
@@ -59,19 +91,42 @@ def processarComandos(comandos) :
       print('N° Atividade, A-Z!')
   elif comandos[1] == AJUDA:
     print('''
-  Ordem:
-    (Data) (hora) (prioridade) (tarefa) (contexto) (projeto) 
+  Ordem de inserção:
+  a (Data) (hora) (prioridade) (tarefa) (contexto) (projeto) 
     
   Formato aceito:
-    Data: DDMMAAAA (DiaMesAno)
-    Hora: HHMM (HoraMinuto)
-    Prioridade: (P) (A-Z)
-    Tarefa: DESC
-    Contexto: @CONTEXT
-    Projeto: +PROJ''')
+    Data:       DDMMAAAA (DiaMesAno)
+    Hora:       HHMM     (HoraMinuto)
+    Prioridade: (P)      (A-Z)
+    Tarefa:     DESC
+    Contexto:   @CONTEXT
+    Projeto:    +PROJ
+  
+  Funções:
+  Adicionar: a (Data) (hora) (prioridade) (tarefa) (contexto) (projeto)
+    - Todos são opcionais menos a tarefa.
+    - A data pode ser substituida por: hoje, amanha, ontem
+    - A hora pode ser substituida por: agora
+    - Prioridade pode ser:             (A) (a) - (a) (A)
+    - Contexto:                        Pode ser colocado mais de um.
+    - Projeto:                         Pode ser colocado mais de um.
+  Remover: r (indice)...
+    - Pode remover mais do que um, colocando varios indices separados por espaço.
+  Listar: l (data, hora, prioridade, contexto, projeto)
+    - Se sozinho, ira aparecer todos do todo.txt.
+    - Se nao colocar o sinal do contexto/projeto, ira aparecer ambos.
+  Fazer: f (indice)...
+    - Pode fazer mais do que um, colocando varios indices separados por espaço.
+  Priorizar: p (indice) (prioridade)
+    - Formatos aceitos: (A) (a) a
+  Interface: i
+    - Não recebe argumentos.
+    
+  Favor rodar no Prompt/Shell.''')
   elif comandos[1] == INTERFACE:
     inter()
   else :
+    print(comandos)
     print("Comando inválido.")
 
 try:
