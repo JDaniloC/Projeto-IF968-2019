@@ -198,7 +198,7 @@ def principal():
         if ((tamanho+tamanho2)*10) > 505: 
                 tamanho = (tamanho+tamanho2)*10
         else: 
-                if platform.system() == "windows": tamanho = 505
+                if platform.system() == "Windows": tamanho = 505
                 else: tamanho = 505 + 135
         if len(linhas) != 0 and len(linhas2) != 0:
                 if len(linhas) > len(linhas2): tamanho2 = 100+(len(linhas)*23)
