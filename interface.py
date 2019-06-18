@@ -231,6 +231,11 @@ def acesso(usuario, senha, janela, label): # Foi retirado a possibilidade de se 
                 label['text'] = 'Usuário não cadastrado'
                 label['foreground'] = 'red'
 
+def apaga(login, event): login.delete(0, END)
+def apaga2(senha, event): 
+        senha.delete(0, END)
+        senha['show'] = '*'
+
 def entrada(): 
         '''
         -> Tela de Login.
@@ -256,10 +261,18 @@ def entrada():
         senha2 = Frame(janela, bd= 0, highlightthickness=0)
         if platform.system() == 'Windows': 
                 login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
-                senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
+                login.insert(0, 'Login')
+                login.bind('<Button-1>', partial(apaga, login))
+                senha = Entry(senha2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
+                senha.insert(0, 'Senha')
+                senha.bind('<Button-1>', partial(apaga2, senha))
         else: 
                 login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='FreeMono 11', highlightthickness=0)
+                login.insert(0, 'Login')
+                login.bind('<Button-1>', partial(apaga, login))
                 senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
+                senha.insert(0, 'Senha')
+                senha.bind('<Button-1>', partial(apaga2, senha))
         vazar = t.Button(janela, text='Sair', width=8, command= partial(sair, janela))
         entrar = t.Button(janela, text='Entrar', width=8, command= partial(acesso, login, senha, janela, label))
 
