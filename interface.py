@@ -5,47 +5,123 @@ import platform
 from tkinter import *
 
 def sair(janela):
-    janela.destroy()
+        '''
+        -> Fecha a janela referenciada.
+        Param janela = Instancia de Tk que quer fechar.
+        Sem return.
+        '''
+        janela.destroy()
 
 def volta(janela):
-    janela.destroy()
-    principal()
+        '''
+        -> Fecha a janela referenciada e abre a funcao principal.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
+        janela.destroy()
+        principal()
 
 def logout(janela):
-    janela.destroy()
-    entrada()
+        '''
+        -> Fecha a janela referenciada e abre a funcao entrada.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
+        janela.destroy()
+        entrada()
 
 def retirar(lista, janela):
+        '''
+        -> Remove as tarefas atraves do indice dado numa lista.
+        1 - Transforma os indices em Inteiros e ordenada a lista. # NEW
+        2 - Inverte a lista e tranforma em String novamente. # NEW
+        3 - Usa a funcao remover para cada item.
+        Vai para a funcao volta.
+
+        Param lista  = Lista de strings com os indices que quer remover.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
         lista = [str(x) for x in sorted([int(y) for y in lista], reverse=True)]
         for i in range(len(lista)):
                 remover(lista[i])
         volta(janela)
 
 def finalizados():
+        '''
+        -> Mostra as tarefas no done.txt.
+        1 - Abre o arquivo done.txt e ve se existe algum item.
+                1.1 - Se nao, ele devolve uma lista de String e 36.
+                1.2 - Se sim, devolve a lista de tarefas e o len do maior elemento.
+        
+        Sem parametros.
+        return: lista de strings e len do maior string, se tiver algum elemento no todo.txt
+        (['Lista de atividades feitas'], 36), se nao.
+        '''
         try:
                 arquivo = open('done.txt', 'r')
                 linhas = arquivo.readlines()
                 arquivo.close()
                 maior = len(max(linhas))
-                if linhas == []:
-                        return ['Lista de atividades feitas.']
                 return linhas, maior
         except:
                 return ['Lista de atividades feitas.'], 36
 
 def terminar(lista, janela):
+        '''
+        -> Remove as tarefas atraves do indice numa lista e adicionar no done.txt.
+        1 - Transforma os indices em Inteiros e ordenada a lista. # NEW
+        2 - Inverte a lista e tranforma em String novamente. # NEW
+        3 - Usa a funcao fazer para cada item.
+        Vai para a funcao volta.
+
+        Param lista  = Lista de strings com os indices que quer mover.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
         lista = [str(x) for x in sorted([int(y) for y in lista], reverse=True)]
         for i in range(len(lista)):
                 fazer(lista[i])
         volta(janela)
 
 def mostrar(elemento, lista):
+        '''
+        -> Adiciona ou remove um indice numa lista referenciada pelo checkbutton.
+        Se o item ja esta na lista ele remove (quando o checkbutton eh desselecionado)
+        Se nao, ele adiciona o indice na lista.
+        
+        Param elemento = String, indice da tarefa.
+        Param lista = A lista que vai ser adicionada/removida.
+        Sem return.
+        '''
         if elemento in lista:
                 lista.remove(elemento)
         else:
                 lista.append(elemento)
 
 def filtragem(lista, tarefas, param = 'n'):
+        '''
+        -> Filtra os elementos do todo.txt.
+        1 - Reseta todos os elementos no Labelframe.
+        2 - Recebe as tarefas atraves da funcao listar.
+        3 - Tenta ver o len da maior tarefa.
+                3.1 - Se tiver uma variavel recebe o tamanho.
+                3.2 - Se nao, entao a variavel recebe 1.
+        4 - Verifica se existe algum elemento na lista de tarefas.
+                4.1 - Se sim, ele adiciona um Checkbutton para cada um, onde:
+                        4.1.1 - O texto fica amarelo se tiver prioridade A.
+                        4.1.2 - O texto fica laranja se tiver prioridade B.
+                        4.1.3 - O texto fica cyan se tiver prioridade C.
+                        4.1.4 - O texto fica verde se tiver prioridade D.
+                        4.1.5 - O texto fica cor de pele se nao tiver prioridade.
+                4.2 - Se nao, adicionar um Checkbutton padrao.
+
+        Param lista   = Uma lista que os Checkbuttons vao adicionar os indices.
+        Param tarefas = O Labelframe que as tarefas vao ser jogadas.
+        Param param   = Um parametro para a funcao listar.
+        return: Se tiver tarefas, (lista de tarefas, len do maior elemento)
+        Se nao, ([], 1)
+        '''
         for widget in tarefas.winfo_children():
                 widget.destroy()
         linhas = listar(param, 's')
@@ -71,6 +147,11 @@ def filtragem(lista, tarefas, param = 'n'):
 def filtra(lista, tarefas, entrada): filtragem(lista, tarefas, entrada.get())
 
 def principal():
+        '''
+        -> Funcao com a tela principal.
+        Sem param.
+        Sem return.
+        '''
         janela = Tk()
         window(janela)
         janela['bg'] = 'PaleGreen3'
@@ -125,18 +206,36 @@ def principal():
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label): # Foi retirado a possibilidade de se criar novos users.
-    usuarios = {'admin':'admin'}
-    if usuario.get() in usuarios:
-            if usuarios[usuario.get()] == senha.get():
-                    volta(janela)
-            else:
-                    label['text'] = 'Senha Inválida'
-                    label['foreground'] = 'red'
-    else:
-            label['text'] = 'Usuário não cadastrado'
-            label['foreground'] = 'red'
+        '''
+        -> Verifica se o usuario e senha estao corretos.
+        Se sim, entra na funcao volta.
+        Se nao, mostra um texto no Label.
+
+        Param usuario = Um Entry.
+        Param senha   = Um Entry.
+        param janela  = Instancia de Tk.
+        Param label   = Label para mostrar onde errou.
+        Sem return.
+        '''
+        usuarios = {'admin':'admin'}
+        if usuario.get() in usuarios:
+                if usuarios[usuario.get()] == senha.get():
+                        volta(janela)
+                else:
+                        label['text'] = 'Senha Inválida'
+                        label['foreground'] = 'red'
+        else:
+                label['text'] = 'Usuário não cadastrado'
+                label['foreground'] = 'red'
 
 def entrada(): 
+        '''
+        -> Tela de Login.
+        Com tamanho ajustado para Linux! # NEW
+
+        Sem Param.
+        Sem return.
+        '''
         janela = Tk()
         window(janela)
         janela.geometry('300x245+550+300')
@@ -150,13 +249,17 @@ def entrada():
         t.Label(janela, text='Senha:', width=8, foreground='white', font='10').place(x=5, y=120)
 
         label = t.Label(janela)
-        login = t.Entry(janela, width= 30)
-        senha = t.Entry(janela, width= 30, show='*')
+        login2 = Frame(janela, bd= 0, highlightthickness=0)
+        login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
+        senha2 = Frame(janela, bd= 0, highlightthickness=0)
+        senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
         vazar = t.Button(janela, text='Sair', width=8, command= partial(sair, janela))
         entrar = t.Button(janela, text='Entrar', width=8, command= partial(acesso, login, senha, janela, label))
 
-        login.place(x=75, y=80)
-        senha.place(x=75, y=120)
+        login2.place(x=75, y=80)
+        login.pack(pady=(0,1))
+        senha2.place(x=75, y=120)
+        senha.pack(pady=(0,1))
         vazar.place(x=80, y=160)
         entrar.place(x=175, y=160)
         label.place(x= 17, y= 200)
@@ -168,6 +271,14 @@ def entrada():
         janela.mainloop()
 
 def window(janela):
+        '''
+        -> Atalho para configurar a janela de forma rapida.
+        Adiciona as configuracoes padroes das janelas que chamarem a funcao.
+        Com icone atualizado para o Linux! # NEW
+
+        Param janela = Instancia de Tk.
+        Sem return
+        '''
         janela['bg'] = 'SpringGreen3'
         janela.title('Todo CheckList')
         janela.geometry('300x330+600+350')
