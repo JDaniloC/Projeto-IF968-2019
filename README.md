@@ -113,7 +113,7 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 
 - [x] *Linhas de código mais enxutas com Docstrings!*
 
-- [ ] *Completamente compatível com linux.*
+- [x] *Completamente compatível com linux.*
 
 <p align="center">
 <image src="./new.gif">

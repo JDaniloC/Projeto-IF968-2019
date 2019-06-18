@@ -195,14 +195,17 @@ def principal():
                 caixa.insert(END, i)
         caixa['height'] = len(linhas)+11
         caixa['width'] = tamanho
-        if ((tamanho+tamanho2)*10) > 505: tamanho = (tamanho+tamanho2)*10
-        else: tamanho = 505
+        if ((tamanho+tamanho2)*10) > 505: 
+                tamanho = (tamanho+tamanho2)*10
+        else: 
+                if platform.system() == "windows": tamanho = 505
+                else: tamanho = 505 + 135
         if len(linhas) != 0 and len(linhas2) != 0:
                 if len(linhas) > len(linhas2): tamanho2 = 100+(len(linhas)*23)
                 else: tamanho2 = 100+(len(linhas2)*23)
         else: tamanho2 = 260
-
-        janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+550+300')
+        if platform.system() == 'Windows': janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+550+300')
+        else: janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+'+str(750-int(tamanho/2))+'+'+str(300-int(tamanho2/2)))
         janela.mainloop()
 
 def acesso(usuario, senha, janela, label): # Foi retirado a possibilidade de se criar novos users.
@@ -238,7 +241,7 @@ def entrada():
         '''
         janela = Tk()
         window(janela)
-        janela.geometry('300x245+550+300')
+        janela.geometry('300x245+750+400')
 
         estilo = t.Style()
         estilo.configure("TLabel", width= 30, background='SpringGreen3', font= 'arial 12 bold', anchor='CENTER')
@@ -250,9 +253,13 @@ def entrada():
 
         label = t.Label(janela)
         login2 = Frame(janela, bd= 0, highlightthickness=0)
-        login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
         senha2 = Frame(janela, bd= 0, highlightthickness=0)
-        senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
+        if platform.system() == 'Windows': 
+                login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
+                senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
+        else: 
+                login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='FreeMono 11', highlightthickness=0)
+                senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
         vazar = t.Button(janela, text='Sair', width=8, command= partial(sair, janela))
         entrar = t.Button(janela, text='Entrar', width=8, command= partial(acesso, login, senha, janela, label))
 
