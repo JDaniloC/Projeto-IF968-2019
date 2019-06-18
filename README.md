@@ -23,8 +23,9 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 
 ```shell
 # Abra o Shell: CMD/Bash... Dentro do repositório local.
-# Tente Python ou Python3 dependendo da versão e configuração do python!
-# Para testar abra o Prompt de comando e digite python se abrir o 2.6 ou dar erro, então é python3.
+# Tente Python, Python3 ou py dependendo da versão e configuração do python!
+# Para testar abra o Prompt de comando e digite python se abrir o 2.6 ou dar erro, então tente python3.
+# Se der erro de syntax ou quaisquer outras circunstâncias, tente py ou verifique se o python está no path.
 ```
 
 #### Comandos
