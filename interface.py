@@ -1,6 +1,6 @@
 from functools import partial
 from tkinter import ttk as t
-from programa import listar, fazer, remover
+from programa import listar, fazer, remover, organizar, adicionar
 import platform
 from tkinter import *
 
@@ -146,6 +146,18 @@ def filtragem(lista, tarefas, param = 'n'):
 
 def filtra(lista, tarefas, entrada): filtragem(lista, tarefas, entrada.get())
 
+def add(janela, criar):
+        '''
+        -> Adiciona uma nova tarefa.
+        Param janela = Instancia de Tk.
+        Param criar = Entry.
+        Sem return.
+        '''
+        comandos = criar.get()
+        itemParaAdicionar = organizar([comandos])[0]
+        adicionar(itemParaAdicionar[0], itemParaAdicionar[1])
+        volta(janela)
+
 def principal():
         '''
         -> Funcao com a tela principal.
@@ -162,11 +174,16 @@ def principal():
         estilo.configure('TLabelFrame', background='SpringGreen4')
         estilo.configure('C.TCheckbutton', background= 'DeepSkyBlue2')
         estilo.configure('G.TCheckbutton', background= 'SeaGreen2')
-
+        
+        imagi = PhotoImage(file = 'back.gif')
         lista = []
+        back = Label(janela, image=imagi).place(x=0, y=0, relwidth=1, relheight=1)
         topo = Frame(janela, bg='SpringGreen4').pack(side=TOP, fill=X)
         baixo = Frame(janela, background='PaleGreen2').pack(fill=X)
-        label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='SpringGreen4')
+        label = t.Label(topo, text= '           Agenda.py - TODO.TXT', font='arial 20 bold', foreground='white', background='cadet blue', relief=RIDGE).pack(fill= X)
+        criar = Frame(topo)
+        criar1 = Entry(criar, width = 70)
+        criar2 = t.Button(criar, text='Adicionar', command=partial(add, janela, criar1))
         tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
         botoes = Frame(topo)
         enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
@@ -178,7 +195,9 @@ def principal():
         caixa = Listbox(feitos, bg= 'PaleGreen2', fg='black', font='verdana 8 bold', width=30, yscrollcommand=scroll.set)
         scroll.config(command= caixa.yview)
 
-        label.pack(fill= X)
+        criar.pack(side= TOP)
+        criar1.pack(side= LEFT)
+        criar2.pack(side= LEFT)
         botoes.pack(side= TOP)
         remove.pack(side= LEFT, padx= 5)
         filtro.pack(side= LEFT)
@@ -259,20 +278,12 @@ def entrada():
         label = t.Label(janela)
         login2 = Frame(janela, bd= 0, highlightthickness=0)
         senha2 = Frame(janela, bd= 0, highlightthickness=0)
-        if platform.system() == 'Windows': 
-                login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
-                login.insert(0, 'Login')
-                login.bind('<Button-1>', partial(apaga, login))
-                senha = Entry(senha2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11')
-                senha.insert(0, 'Senha')
-                senha.bind('<Button-1>', partial(apaga2, senha))
-        else: 
-                login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='FreeMono 11', highlightthickness=0)
-                login.insert(0, 'Login')
-                login.bind('<Button-1>', partial(apaga, login))
-                senha = Entry(senha2, width= 22, show='*', relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
-                senha.insert(0, 'Senha')
-                senha.bind('<Button-1>', partial(apaga2, senha))
+        login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
+        login.insert(0, 'Login')
+        login.bind('<Button-1>', partial(apaga, login))
+        senha = Entry(senha2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
+        senha.insert(0, 'Senha')
+        senha.bind('<Button-1>', partial(apaga2, senha))
         vazar = t.Button(janela, text='Sair', width=8, command= partial(sair, janela))
         entrar = t.Button(janela, text='Entrar', width=8, command= partial(acesso, login, senha, janela, label))
 
