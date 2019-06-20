@@ -2,6 +2,7 @@ import sys
 from datacao import atual
 from interface import entrada as inter
 from programa import organizar, adicionar, listar, fazer, remover, priorizar
+from imail import enviar
 
 ADICIONAR = 'a'
 REMOVER = 'r'
@@ -10,11 +11,11 @@ PRIORIZAR = 'p'
 LISTAR = 'l'
 AJUDA = 'h'
 INTERFACE = 'i'
+ENVIAR = 'e'
 HOJE = 'hoje'
 AGORA = 'agora'
 AMANHA = 'amanha'
 ONTEM = 'ontem'
-
 
 def processarComandos(comandos) :
   '''
@@ -26,6 +27,7 @@ def processarComandos(comandos) :
   LISTAR    = l (mostra as tasks do todo.txt).
   AJUDA     = h (Mostra como proceder em cada função).
   INTERFACE = i (Acelera processos).
+  ENVIAR    = e (Envia o todo.txt por email).
   
   -> Também aceita datação dinamica, atraves dos seguintes comandos:
   HOJE   = hoje   (O dia de hoje DDMMAAAA).
@@ -80,7 +82,6 @@ def processarComandos(comandos) :
           print(elemento)
           fazer(elemento)
       else:
-        print('ELSE')
         fazer(comandos[2])
     except:
       print('ERROR: Digite um número válido!')
@@ -121,10 +122,16 @@ def processarComandos(comandos) :
     - Formatos aceitos: (A) (a) a
   Interface: i
     - Não recebe argumentos.
+  Email: e #NEW
+    - Envia o todo.txt por email!
+    - Não recebe argumentos.
+    - Pede o email, se não tiver @, então adiciona @gmail.com
     
   Favor rodar no Prompt/Shell.''')
   elif comandos[1] == INTERFACE:
     inter()
+  elif comandos[1] == ENVIAR:
+    enviar(input('Digite o seu email: '), listar('n', 's'))
   else :
     print(comandos)
     print("Comando inválido.")
