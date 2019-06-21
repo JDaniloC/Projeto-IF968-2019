@@ -116,6 +116,10 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 
 - [x] *Completamente compatível com linux.*
 
+- [x] *Enviando os dados por [e-mail!](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/imail.py)*
+
+- [x] *Compatibilidade com um próprio bot no [Telegram!](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/online.py)*
+
 <p align="center">
 <image src="./new.gif">
 </p>
