@@ -19,7 +19,7 @@ def textoformatado(string):
                     textinho += aceitos[a]
     return textinho + '\n'
 
-def enviar(email, tasks):
+def enviar(email, tasks, telegram = 'n'):
     '''
     -> Recebe um email e tarefas e envia para o email desejado.
     Param email = email destino, se nao tiver @, ele adiciona @gmail.com.
@@ -51,7 +51,13 @@ def enviar(email, tasks):
             server.login(usuario, senha)
             server.sendmail(de, para, texto)
             server.close()
-
-            print ('Email Enviado!')
+            
+            if telegram == 'n': 
+                print ('Email Enviado!')
+            else:
+                return 'Email Enviado!'
         except:  
-            print ('Alguma coisa deu errado...')
+            if telegram == 'n':
+                print ('Alguma coisa deu errado...')
+            else:
+                return 'Alguma coisa deu errado...'

@@ -33,7 +33,7 @@ def printCores(texto, cor) :
   print(cor + texto + RESET)
 
 
-def adicionar(descricao, extras):
+def adicionar(descricao, extras, telegram = 'n'):
   '''
   -> Recebe a descricao e uma tupla/lista de extras e escreve no arquivo todo.txt
   Param descricao = Uma cadeia de strings relativos a tarefa em si.
@@ -48,8 +48,11 @@ def adicionar(descricao, extras):
     Se não, devolve False.
   '''
   if descricao  == '' :
-    print('Nada adicionado: Sem Descrição!')
-    return False
+    if telegram == 'n':
+      print('Nada adicionado: Sem Descrição!')
+      return False
+    else:
+      return []
   else:
     novaAtividade = ''
     for i in range(len(extras)):
@@ -57,10 +60,13 @@ def adicionar(descricao, extras):
         novaAtividade += descricao + ' '
       if extras[i] != '':
         novaAtividade += extras[i] + ' '
+  if telegram != 'n':
+    return novaAtividade + '\n'
   try: 
     fp = open(TODO_FILE, 'a')
     fp.write(novaAtividade + "\n")
     fp.close()
+    print('Adicionado com sucesso!')
   except IOError as err:
     print("Não foi possível escrever para o arquivo " + TODO_FILE)
     print(err)
@@ -238,7 +244,7 @@ def filtragem(linhas, ordem, conteudo):
   return textinho
   
 
-def listar(filtro = 'n', inter= 'n'):
+def listar(filtro = 'n', inter= 'n', telegram= 'n'):
   '''
   -> Imprime na tela as tarefas no arquivo todo.txt
   1 - Tenta executar todo o programa, caso contrario emite um erro.
@@ -252,11 +258,14 @@ def listar(filtro = 'n', inter= 'n'):
   Param inter = Caso passado devolve uma lista das tarefas.
   return: Se inter diferente de "n", devolve uma lista de cada tarefa de forma organizada.
   '''
-  try: 
-    fp = open(TODO_FILE, 'r')
-    linhas = fp.readlines()
+  try:
+    if telegram == 'n':
+      fp = open(TODO_FILE, 'r')
+      linhas = fp.readlines()
+      fp.close()
+    else:
+      linhas = telegram
     conteudo = organizar(linhas)
-    fp.close()
 
     tarefas = {}
     for i in range(len(conteudo)):
@@ -280,7 +289,7 @@ def listar(filtro = 'n', inter= 'n'):
         if len([x for x in linhas[1] if x in filtros]) > 0:
           textos.append(filtragem(linhas, ordem, conteudo))
     
-    if inter != 'n':
+    if inter != 'n' or telegram != 'n':
       lista = []
       for tarefinhas in textos:
         lista.append(tarefinhas)
@@ -441,7 +450,7 @@ def remover(atividade, faz = 'n'):
     printCores('Operação realizada com sucesso!', REVERSE)
 
 
-def priorizar(num, prioridade):
+def priorizar(num, prioridade, telegram = 'n'):
   '''
   -> Adiciona/modifica a prioridade de uma tarefa.
   1 - Adiciona () na prioridade nova se nao tiver. #NEW!
@@ -454,14 +463,19 @@ def priorizar(num, prioridade):
   Param prioridade = String, prioridade no formato a-Z ou (A)-(z).
   Nao devolve nada.
   '''
-  fp = open(TODO_FILE, 'r')
-  linhas = fp.readlines()
-  fp.close()
+  if telegram == 'n':
+    fp = open(TODO_FILE, 'r')
+    linhas = fp.readlines()
+    fp.close()
+  else:
+    linhas = telegram
   if prioridade[0] != '(':
     prioridade = '('+prioridade.upper()+')'
   if prioridadeValida(prioridade):
-    if 0 > int(num) or int(num) > len(linhas):
+    if 0 > int(num) > len(linhas):
       print('Não consta na lista!')
+      if telegram != 'n':
+        return 'Não consta na lista!'
     else:
       for i in range(len(linhas)):
         if i == int(num)-1:
@@ -471,6 +485,9 @@ def priorizar(num, prioridade):
       extras[2] = prioridade.upper()
       extras.insert(3, desc) # Ou extras = extras[:3] + [desc] + extras[3:]
       extras = ' '.join([x for x in extras if x != ''])
+      if telegram != 'n':
+        linhas[int(num)-1] = extras
+        return linhas
       novo = open(TODO_FILE, 'w')
       for i in range(len(linhas)):
         if i == int(num)-1:

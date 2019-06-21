@@ -17,7 +17,7 @@ AGORA = 'agora'
 AMANHA = 'amanha'
 ONTEM = 'ontem'
 
-def processarComandos(comandos) :
+def processarComandos(comandos, telegram = 'n') :
   '''
   -> Direciona a outras funções a partir dos seguintes comandos:
   ADICIONAR = a (adiciona uma nova task).
@@ -55,13 +55,22 @@ def processarComandos(comandos) :
     comandos.pop(0) # remove 'adicionar'
     itemParaAdicionar = organizar([' '.join(comandos)])[0]
     # itemParaAdicionar = (descricao, (prioridade, data, hora, contexto, projeto))
-    adicionar(itemParaAdicionar[0], itemParaAdicionar[1]) # novos itens não têm prioridade
+    if telegram == 'n':
+      adicionar(itemParaAdicionar[0], itemParaAdicionar[1])
+    else:
+      return adicionar(itemParaAdicionar[0], itemParaAdicionar[1], 's')
   elif comandos[1] == LISTAR:
     print('Tarefas:\n')
-    try:
-      listar(comandos[2])
-    except:
-      listar()
+    if telegram == 'n':
+      try:
+        listar(comandos[2])
+      except:
+        listar()
+    else:
+      try:
+        return listar(comandos[2], 'n', telegram)
+      except:
+        return listar('n', 'n', telegram)
   elif comandos[1] == REMOVER:
     try:
       if len(comandos[2:]) > 1:
@@ -86,10 +95,16 @@ def processarComandos(comandos) :
     except:
       print('ERROR: Digite um número válido!')
   elif comandos[1] == PRIORIZAR:
-    try:
-      priorizar(comandos[2], comandos[3])
-    except:
-      print('N° Atividade, A-Z!')
+    if telegram == 'n':
+      try:
+        priorizar(comandos[2], comandos[3])
+      except:
+        print('N° Atividade, A-Z!')
+    else:
+      try:
+        return priorizar(comandos[2], comandos[3], telegram)
+      except:
+        return 'N° Atividade, A-Z!'
   elif comandos[1] == AJUDA:
     print('''
   Ordem de inserção:
@@ -131,7 +146,10 @@ def processarComandos(comandos) :
   elif comandos[1] == INTERFACE:
     inter()
   elif comandos[1] == ENVIAR:
-    enviar(input('Digite o seu email: '), listar('n', 's'))
+    if telegram == 'n':
+      enviar(input('Digite o seu email: '), listar('n', 's'))
+    else:
+      return enviar(telegram[0], listar('n', 'n', telegram[1]), 's')
   else :
     print(comandos)
     print("Comando inválido.")
