@@ -2,7 +2,7 @@
 import telepot
 from agenda import processarComandos
 
-bot = telepot.Bot("737574969:AAHgaEmqn2jkzSW5shewX-U1jS8R8-VpK1s")
+bot = telepot.Bot("TOKEN!!")
 
 def listou(comando):
     '''
@@ -91,7 +91,7 @@ def receiver(msg):
                         bot.sendMessage(pessoa, variavel)
                 elif comando[1] == 'e':
                     if len(comando) > 2:
-                        mensagem = processarComandos(comando, (comando, lista))
+                        mensagem = processarComandos(comando, (comando[2], lista))
                         bot.sendMessage(pessoa, mensagem)
                     else:
                         bot.sendMessage(pessoa, 'Precisa de um e-mail!')
