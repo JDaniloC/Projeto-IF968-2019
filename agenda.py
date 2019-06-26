@@ -38,27 +38,41 @@ def processarComandos(comandos, telegram = 'n') :
   Sem return.
   '''
   today, now, yesterday, tomorrow = atual() # Pegar o dia e hora de hoje, ontem e amanhã.
+  strdatas, datas = [AGORA, HOJE, ONTEM, AMANHA], [now, today, yesterday, tomorrow]
   if len(comandos) > 2:
-    if (comandos[2]).lower() == HOJE:
-      comandos[2] = today
+    if (comandos[2]).lower() in strdatas[1:]:
+      comandos[2] = datas[strdatas.index(comandos[2])]
+      if len(comandos) > 3 and (comandos[3]).lower() == AGORA: comandos[3] = now
     elif (comandos[2]).lower() == AGORA:
       comandos[2] = now
-    elif (comandos[2]).lower() == AMANHA:
-      comandos[2] = tomorrow
-    elif (comandos[2]).lower() == ONTEM:
-      comandos[2] = yesterday
-    if len(comandos) > 3 and (comandos[3]).lower() == AGORA:
-      comandos[3] = now
   
   if comandos[1] == ADICIONAR:
     comandos.pop(0) # remove 'agenda.py'
     comandos.pop(0) # remove 'adicionar'
-    itemParaAdicionar = organizar([' '.join(comandos)])[0]
+    lista, lista2 = [], []
+    if '~~' in comandos: # Vê se tá tentando adicionar vários.
+      comandos.append('~~')
+      for i in range(len(comandos)):
+        if comandos[i] == '~~' and len(lista2) != 0:
+          lista.append(' '.join(lista2))
+          lista2 = []
+          if len(comandos[i:]) > 2:
+            if (comandos[i+1]).lower() in strdatas[1:]:
+              comandos[i+1] = datas[strdatas.index(comandos[i+1])]
+              if len(comandos[i:]) > 3 and (comandos[i+2]).lower() == 'agora': comandos[i+2] = datas[0]
+            elif (comandos[i+1]).lower() == 'agora': comandos[i+1] = datas[0]
+        elif comandos[i] == '~~': pass
+        else: lista2.append(comandos[i])
+      itemParaAdicionar = organizar(lista)
+    else:
+      itemParaAdicionar = organizar([' '.join(comandos)]) #[0]
     # itemParaAdicionar = (descricao, (prioridade, data, hora, contexto, projeto))
     if telegram == 'n':
-      adicionar(itemParaAdicionar[0], itemParaAdicionar[1])
+      for i in itemParaAdicionar:
+        adicionar(i[0], i[1])
     else:
-      return adicionar(itemParaAdicionar[0], itemParaAdicionar[1], 's')
+      for i in itemParaAdicionar:
+        return adicionar(i[0], i[1], 's')
   elif comandos[1] == LISTAR:
     print('Tarefas:\n')
     if telegram == 'n':
@@ -121,6 +135,7 @@ def processarComandos(comandos, telegram = 'n') :
   Funções:
   Adicionar: a (Data) (hora) (prioridade) (tarefa) (contexto) (projeto)
     - Todos são opcionais menos a tarefa.
+    - Pode adicionar mais de um separando as tarefas com um "~~"
     - A data pode ser substituida por: hoje, amanha, ontem
     - A hora pode ser substituida por: agora
     - Prioridade pode ser:             (A) (a) - (a) (A)
@@ -137,7 +152,7 @@ def processarComandos(comandos, telegram = 'n') :
     - Formatos aceitos: (A) (a) a
   Interface: i
     - Não recebe argumentos.
-  Email: e #NEW
+  Email: e
     - Envia o todo.txt por email!
     - Não recebe argumentos.
     - Pede o email, se não tiver @, então adiciona @gmail.com

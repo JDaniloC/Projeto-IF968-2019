@@ -346,13 +346,13 @@ def ordenarPorDataHora(itens):
     i += 1
   for vezes in range(len(itens)-1):
     for x in range(len(itens)-1):
-      if datainverso(itens[x][1][0]) < datainverso(itens[x+1][1][0]):
+      if datainverso(itens[x][1][0]) > datainverso(itens[x+1][1][0]):
         aux = itens[x]
         itens[x] = itens[x+1]
         itens[x+1] = aux
       elif datainverso(itens[x][1][0]) == datainverso(itens[x+1][1][0]):
         if itens[x][1][1] != '' and itens[x+1][1][1] != '':
-          if int(itens[x][1][1]) < int(itens[x+1][1][1]):
+          if int(itens[x][1][1]) > int(itens[x+1][1][1]):
             aux = itens[x]
             itens[x] = itens[x+1]
             itens[x+1] = aux
@@ -365,7 +365,7 @@ def ordenarPorDataHora(itens):
     i += 1
   for vezes in range(len(semData)-1):
     for x in range(len(semData)-1):
-      if int(semData[x][1][1]) < int(semData[x+1][1][1]):
+      if int(semData[x][1][1]) > int(semData[x+1][1][1]):
         aux = semData[x]
         semData[x] = semData[x+1]
         semData[x+1] = aux

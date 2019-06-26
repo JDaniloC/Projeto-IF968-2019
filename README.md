@@ -7,7 +7,7 @@
 
 >> "O objetivo deste trabalho é praticar a escrita de funções e programas em Python, em particular, programas envolvendo strings, ~~vetores~~, listas, tuplas, dicionários e arquivos. Além disso, é a primeira oportunidade que os alunos têm, no contexto do curso de *Sistemas de Informação*, de desenvolver um sistema não-trivial, ainda que simples." ~[Fernando Castor](https://sites.google.com/a/cin.ufpe.br/castor/).
 
-*Leia sobre o [projeto](https://docs.google.com/a/cin.ufpe.br/viewer?a=v&pid=sites&srcid=Y2luLnVmcGUuYnJ8aWY5NjhzaXxneDozNzU3OWRjNDFiZjdiNTAz) para saber o desenvolvimento.*
+*Leia sobre o [projeto](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/projeto.pdf) para saber o desenvolvimento.*
 
 <p float="left">
   <image width=49%, src="./add.gif"/> 
@@ -36,6 +36,8 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 >> python agenda.py a (data) (hora) (prioridade) (descrição) (contexto) (projeto)
 ```
 *NOTA:* Sempre nessa ordem, a única informação obrigatória é a descrição, que é a informação da tarefa.
+
+*NOTA2:* Pode adicionar mais de uma tarefa colocando " ~~ " entre elas, sem as aspas.
 
 - `Data`: A data referente a criação ou objetivo da tarefa, pode ser referenciado no comando Listar.
   - Formato 1: **DDMMAAAA**, sem espaço, apenas números.
@@ -77,7 +79,7 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 ```shell
 >> python agenda.py p (prioridade) (indice da tarefa)
 ```
-###### Irá adicionar ou alterar a prioridade de uma determinada tarefa. Mesmas regras do comando R e A.
+###### Irá adicionar ou alterar a prioridade de uma determinada tarefa. Mesmas regras do comando R e A, um por vez.
 
 > Comando help: h
 
@@ -94,31 +96,29 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 ###### Irá mostrar mostrar uma interface para listar/filtrar ou fazer/remover vários de uma vez. Não recebe parâmetros.
 
 ## Novidades
-- [x] *[Projeto](https://github.com/Tiodonilo/ProjetoP1/tree/Projeto_1.0) funcional.*
+- [x] *[Projeto](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_1.0/agenda.py) funcional.*
 
-- [x] *Filtragem dinâmica @Cont ou +Proj ou Cont/Proj.*
+- [x] *Filtragem dinâmica data/hora/prioridade... @Cont ou +Proj ou Cont/Proj.*
 
-- [x] *Listagem dinâmica entre todos os extras e "ontem, hoje, amanhã".*
-
-- [x] *[README.md](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/README.md) atualizado!*
+- [x] *[README.md](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/README.md) atualizado!*
 
 - [x] *Help adicionado aos comandos, e várias adições e modificações!*
 
-- [x] *Modularização da [datação](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/datacao.py) (ontem, hoje, amanhã) e do [programa](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/programa.py) principal.*
+- [x] *Modularização da [datação](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/datacao.py) (ontem, hoje, amanhã, agora), [programa](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/programa.py) principal, e outros.*
 
-- [x] *Criação de uma [interface](https://github.com/Tiodonilo/ProjetoP1/blob/Projeto_3.0/interface.py) gráfica funcional, com ícone próprio.*
+- [x] *Criação de uma [interface](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto-2.0/agenda.py) gráfica funcional, com [ícone](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/icone.ico) próprio.*
 
-- [x] *Correção de bugs na interface, datação e afins.*
+- [x] *Correção de bugs na interface, datação, programa e afins.*
 
-- [x] *Possibilidade de deletar/finalizar várias tarefas em uma só linha no Shell e adicionar mais de um projeto/pesquisa por comando!*
+- [x] *Possibilidade de adicionar/deletar/finalizar várias tarefas em uma só linha no Shell e adicionar mais de um projeto/pesquisa por comando!*
 
 - [x] *Linhas de código mais enxutas com Docstrings!*
 
-- [x] *Completamente compatível com linux.*
+- [x] *Interface completamente compatível com linux.*
 
 - [x] *Enviando os dados por [e-mail!](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/imail.py)*
 
-- [x] *Compatibilidade com um próprio bot no [Telegram!](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/online.py)*
+- [x] *Compatibilidade com um bot no [Telegram!](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/online.py)*
 
 <p align="center">
 <image src="./new.gif">

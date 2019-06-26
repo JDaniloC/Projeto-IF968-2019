@@ -3,6 +3,8 @@ from tkinter import ttk as t
 from programa import listar, fazer, remover, organizar, adicionar
 import platform
 from tkinter import *
+from datacao import atual
+from imail import enviar
 
 def sair(janela):
         '''
@@ -124,6 +126,11 @@ def filtragem(lista, tarefas, param = 'n'):
         '''
         for widget in tarefas.winfo_children():
                 widget.destroy()
+        if len(param.split()) > 1: param = param[0]
+        today, now, yesterday, tomorrow = atual()
+        strdatas, datas = ['agora', 'hoje', 'ontem', 'amanha'], [now, today, yesterday, tomorrow]
+        if param in strdatas: 
+                param = datas[strdatas.index(param)]
         linhas = listar(param, 's')
         try: maior = len(max(linhas))
         except: maior = 1
@@ -154,9 +161,40 @@ def add(janela, criar):
         Sem return.
         '''
         comandos = criar.get()
-        itemParaAdicionar = organizar([comandos])[0]
-        adicionar(itemParaAdicionar[0], itemParaAdicionar[1])
+        comandos = comandos.split()
+        today, now, yesterday, tomorrow = atual()
+        strdatas, datas = ['agora', 'hoje', 'ontem', 'amanha'], [now, today, yesterday, tomorrow]
+        if len(comandos) > 1:
+                if (comandos[0]).lower() in strdatas[1:]: 
+                        comandos[0] = datas[strdatas.index(comandos[0])]
+                        if len(comandos) > 2 and (comandos[1]).lower() == "agora": comandos[1] = now
+                elif (comandos[0]).lower() == 'agora': comandos[0] = now
+        
+        lista, lista2 = [], []
+        if '~~' in comandos:
+                comandos.append('~~')
+                for i in range(len(comandos)):
+                        if comandos[i] == '~~' and len(lista2) != 0:
+                                lista.append(' '.join(lista2))
+                                lista2 = []
+                                if len(comandos[i:]) > 2:
+                                        if (comandos[i+1]).lower() in strdatas[1:]:
+                                                comandos[i+1] = datas[strdatas.index(comandos[i+1])]
+                                                if len(comandos[i:]) > 3 and (comandos[i+2]).lower() == 'agora': comandos[i+2] = datas[0]
+                                        elif (comandos[i+1]).lower() == 'agora': comandos[i+1] = datas[0]
+                        elif comandos[i] == '~~': pass
+                        else: lista2.append(comandos[i])
+                itemParaAdicionar = organizar(lista)
+        else:
+                itemParaAdicionar = organizar([' '.join(comandos)])
+        for i in itemParaAdicionar:
+                try: adicionar(i[0], i[1])
+                except: print('Algo de errado não está certo.')
         volta(janela)
+
+def envia(email):
+        email = (email.get()).strip()
+        enviar(email, listar('n', 's'))
 
 def principal():
         '''
@@ -182,8 +220,9 @@ def principal():
         baixo = Frame(janela, background='PaleGreen2').pack(fill=X)
         label = t.Label(topo, text= '           Agenda.py - TODO.TXT', font='arial 20 bold', foreground='white', background='cadet blue', relief=RIDGE).pack(fill= X)
         criar = Frame(topo)
-        criar1 = Entry(criar, width = 70)
-        criar2 = t.Button(criar, text='Adicionar', command=partial(add, janela, criar1))
+        criar1 = Entry(criar, width = 60)
+        criar2 = t.Button(criar, text= 'Adicionar', command=partial(add, janela, criar1))
+        criar3 = t.Button(criar, text= 'Enviar', command= partial(envia, criar1))
         tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
         botoes = Frame(topo)
         enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
@@ -198,6 +237,7 @@ def principal():
         criar.pack(side= TOP)
         criar1.pack(side= LEFT)
         criar2.pack(side= LEFT)
+        criar3.pack(side= LEFT)
         botoes.pack(side= TOP)
         remove.pack(side= LEFT, padx= 5)
         filtro.pack(side= LEFT)
