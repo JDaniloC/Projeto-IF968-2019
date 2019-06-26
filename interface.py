@@ -1,126 +1,311 @@
-from tkinter import *
 from functools import partial
 from tkinter import ttk as t
-from agenda import listar, fazer, remover
+from programa import listar, fazer, remover, organizar, adicionar
 import platform
+from tkinter import *
+from datacao import atual
+from imail import enviar
 
 def sair(janela):
-    janela.destroy()
+        '''
+        -> Fecha a janela referenciada.
+        Param janela = Instancia de Tk que quer fechar.
+        Sem return.
+        '''
+        janela.destroy()
 
 def volta(janela):
-    janela.destroy()
-    principal()
+        '''
+        -> Fecha a janela referenciada e abre a funcao principal.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
+        janela.destroy()
+        principal()
 
 def logout(janela):
-    janela.destroy()
-    entrada()
+        '''
+        -> Fecha a janela referenciada e abre a funcao entrada.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
+        janela.destroy()
+        entrada()
 
 def retirar(lista, janela):
-        for i in lista:
-                remover(i)
+        '''
+        -> Remove as tarefas atraves do indice dado numa lista.
+        1 - Transforma os indices em Inteiros e ordenada a lista. # NEW
+        2 - Inverte a lista e tranforma em String novamente. # NEW
+        3 - Usa a funcao remover para cada item.
+        Vai para a funcao volta.
+
+        Param lista  = Lista de strings com os indices que quer remover.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
+        lista = [str(x) for x in sorted([int(y) for y in lista], reverse=True)]
+        for i in range(len(lista)):
+                remover(lista[i])
         volta(janela)
 
 def finalizados():
+        '''
+        -> Mostra as tarefas no done.txt.
+        1 - Abre o arquivo done.txt e ve se existe algum item.
+                1.1 - Se nao, ele devolve uma lista de String e 36.
+                1.2 - Se sim, devolve a lista de tarefas e o len do maior elemento.
+        
+        Sem parametros.
+        return: lista de strings e len do maior string, se tiver algum elemento no todo.txt
+        (['Lista de atividades feitas'], 36), se nao.
+        '''
         try:
                 arquivo = open('done.txt', 'r')
                 linhas = arquivo.readlines()
                 arquivo.close()
-                if linhas == []:
-                        return ['Lista de atividades feitas.']
-                return linhas
+                maior = len(max(linhas))
+                return linhas, maior
         except:
-                return ['Lista de atividades feitas.']
+                return ['Lista de atividades feitas.'], 36
 
 def terminar(lista, janela):
-        for i in lista:
-                fazer(i)
+        '''
+        -> Remove as tarefas atraves do indice numa lista e adicionar no done.txt.
+        1 - Transforma os indices em Inteiros e ordenada a lista. # NEW
+        2 - Inverte a lista e tranforma em String novamente. # NEW
+        3 - Usa a funcao fazer para cada item.
+        Vai para a funcao volta.
+
+        Param lista  = Lista de strings com os indices que quer mover.
+        Param janela = Instancia de Tk.
+        Sem return.
+        '''
+        lista = [str(x) for x in sorted([int(y) for y in lista], reverse=True)]
+        for i in range(len(lista)):
+                fazer(lista[i])
         volta(janela)
 
 def mostrar(elemento, lista):
+        '''
+        -> Adiciona ou remove um indice numa lista referenciada pelo checkbutton.
+        Se o item ja esta na lista ele remove (quando o checkbutton eh desselecionado)
+        Se nao, ele adiciona o indice na lista.
+        
+        Param elemento = String, indice da tarefa.
+        Param lista = A lista que vai ser adicionada/removida.
+        Sem return.
+        '''
         if elemento in lista:
                 lista.remove(elemento)
         else:
                 lista.append(elemento)
 
-def teste(lista, tarefas, param = 'n'):
+def filtragem(lista, tarefas, param = 'n'):
+        '''
+        -> Filtra os elementos do todo.txt.
+        1 - Reseta todos os elementos no Labelframe.
+        2 - Recebe as tarefas atraves da funcao listar.
+        3 - Tenta ver o len da maior tarefa.
+                3.1 - Se tiver uma variavel recebe o tamanho.
+                3.2 - Se nao, entao a variavel recebe 1.
+        4 - Verifica se existe algum elemento na lista de tarefas.
+                4.1 - Se sim, ele adiciona um Checkbutton para cada um, onde:
+                        4.1.1 - O texto fica amarelo se tiver prioridade A.
+                        4.1.2 - O texto fica laranja se tiver prioridade B.
+                        4.1.3 - O texto fica cyan se tiver prioridade C.
+                        4.1.4 - O texto fica verde se tiver prioridade D.
+                        4.1.5 - O texto fica cor de pele se nao tiver prioridade.
+                4.2 - Se nao, adicionar um Checkbutton padrao.
+
+        Param lista   = Uma lista que os Checkbuttons vao adicionar os indices.
+        Param tarefas = O Labelframe que as tarefas vao ser jogadas.
+        Param param   = Um parametro para a funcao listar.
+        return: Se tiver tarefas, (lista de tarefas, len do maior elemento)
+        Se nao, ([], 1)
+        '''
         for widget in tarefas.winfo_children():
                 widget.destroy()
+        if len(param.split()) > 1: param = param[0]
+        today, now, yesterday, tomorrow = atual()
+        strdatas, datas = ['agora', 'hoje', 'ontem', 'amanha'], [now, today, yesterday, tomorrow]
+        if param in strdatas: 
+                param = datas[strdatas.index(param)]
         linhas = listar(param, 's')
-        for i in linhas:
-                if i[0] == 'A':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'Y.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                elif i[0] == 'B':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'R.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                elif i[0] == 'C':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'C.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                elif i[0] == 'D':
-                        t.Checkbutton(tarefas, text= i[3:], style= 'G.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-                else:
-                        t.Checkbutton(tarefas, text= i[3:], style= 'TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
-        return linhas
+        try: maior = len(max(linhas))
+        except: maior = 1
+        if type(linhas) == list:
+                for i in linhas:
+                        if i[0] == 'A':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'Y.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        elif i[0] == 'B':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'R.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        elif i[0] == 'C':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'C.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        elif i[0] == 'D':
+                                t.Checkbutton(tarefas, text= i[3:], style= 'G.TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                        else:
+                                t.Checkbutton(tarefas, text= i[3:], style= 'TCheckbutton', command= partial(mostrar, i[1:3], lista)).pack(fill=X)
+                return linhas, maior
+        else:
+                t.Checkbutton(tarefas, text= 'Nenhuma tarefa', style= 'Y.TCheckbutton').pack(fill=X)
+                return [], 1
 
-def filtra(lista, tarefas, entrada):
-        teste(lista, tarefas, entrada.get())
+def filtra(lista, tarefas, entrada): filtragem(lista, tarefas, entrada.get())
+
+def add(janela, criar):
+        '''
+        -> Adiciona uma nova tarefa.
+        Param janela = Instancia de Tk.
+        Param criar = Entry.
+        Sem return.
+        '''
+        comandos = criar.get()
+        comandos = comandos.split()
+        today, now, yesterday, tomorrow = atual()
+        strdatas, datas = ['agora', 'hoje', 'ontem', 'amanha'], [now, today, yesterday, tomorrow]
+        if len(comandos) > 1:
+                if (comandos[0]).lower() in strdatas[1:]: 
+                        comandos[0] = datas[strdatas.index(comandos[0])]
+                        if len(comandos) > 2 and (comandos[1]).lower() == "agora": comandos[1] = now
+                elif (comandos[0]).lower() == 'agora': comandos[0] = now
+        
+        lista, lista2 = [], []
+        if '~~' in comandos:
+                comandos.append('~~')
+                for i in range(len(comandos)):
+                        if comandos[i] == '~~' and len(lista2) != 0:
+                                lista.append(' '.join(lista2))
+                                lista2 = []
+                                if len(comandos[i:]) > 2:
+                                        if (comandos[i+1]).lower() in strdatas[1:]:
+                                                comandos[i+1] = datas[strdatas.index(comandos[i+1])]
+                                                if len(comandos[i:]) > 3 and (comandos[i+2]).lower() == 'agora': comandos[i+2] = datas[0]
+                                        elif (comandos[i+1]).lower() == 'agora': comandos[i+1] = datas[0]
+                        elif comandos[i] == '~~': pass
+                        else: lista2.append(comandos[i])
+                itemParaAdicionar = organizar(lista)
+        else:
+                itemParaAdicionar = organizar([' '.join(comandos)])
+        for i in itemParaAdicionar:
+                try: adicionar(i[0], i[1])
+                except: print('Algo de errado não está certo.')
+        volta(janela)
+
+def envia(email):
+        email = (email.get()).strip()
+        enviar(email, listar('n', 's'))
 
 def principal():
+        '''
+        -> Funcao com a tela principal.
+        Sem param.
+        Sem return.
+        '''
         janela = Tk()
         window(janela)
-        janela['bg'] = 'DarkOrchid3'
+        janela['bg'] = 'PaleGreen3'
         estilo = t.Style()
         estilo.configure('TCheckbutton', background= "peach puff")
         estilo.configure('Y.TCheckbutton', background= "gold")
         estilo.configure('R.TCheckbutton', background= 'orangered')
-        estilo.configure('TLabelFrame', background='DarkOrchid4')
+        estilo.configure('TLabelFrame', background='SpringGreen4')
         estilo.configure('C.TCheckbutton', background= 'DeepSkyBlue2')
         estilo.configure('G.TCheckbutton', background= 'SeaGreen2')
-
+        
+        imagi = PhotoImage(file = 'back.gif')
         lista = []
-        topo = Frame(janela, bg='DarkOrchid4').pack(side=TOP, fill=X)
-        baixo = Frame(janela, background='DarkOrchid2').pack(fill=X)
-        label = t.Label(topo, text= 'TODO.TXT', font='arial 20', background='DarkOrchid4')
+        back = Label(janela, image=imagi).place(x=0, y=0, relwidth=1, relheight=1)
+        topo = Frame(janela, bg='SpringGreen4').pack(side=TOP, fill=X)
+        baixo = Frame(janela, background='PaleGreen2').pack(fill=X)
+        label = t.Label(topo, text= '           Agenda.py - TODO.TXT', font='arial 20 bold', foreground='white', background='cadet blue', relief=RIDGE).pack(fill= X)
+        criar = Frame(topo)
+        criar1 = Entry(criar, width = 60)
+        criar2 = t.Button(criar, text= 'Adicionar', command=partial(add, janela, criar1))
+        criar3 = t.Button(criar, text= 'Enviar', command= partial(envia, criar1))
         tarefas = t.LabelFrame(baixo, text='Tarefas', height=200, width= 40)
-        feitos = t.LabelFrame(baixo, text='Done', width=40)
         botoes = Frame(topo)
         enviar = t.Button(botoes, text='Finalizar Tarefas', command=partial(terminar, lista, janela))
         remove = t.Button(botoes, text='Remover Tarefas', command=partial(retirar, lista, janela))
-        caixa = Listbox(feitos, bg= 'DarkOrchid2', fg='white', font='arial', width=30)
         filtro = Entry(botoes, width=37)
         pesquisar = t.Button(botoes, text='Filtrar', command= partial(filtra, lista, tarefas, filtro))
+        feitos = t.LabelFrame(baixo, text='Done', width=40)
+        scroll = Scrollbar(feitos)
+        caixa = Listbox(feitos, bg= 'PaleGreen2', fg='black', font='verdana 8 bold', width=30, yscrollcommand=scroll.set)
+        scroll.config(command= caixa.yview)
 
-        label.pack(fill=X)
-        botoes.pack(side=TOP)
-        remove.pack(side=LEFT, padx=5)
-        filtro.pack(side=LEFT)
-        pesquisar.pack(side=LEFT)
-        enviar.pack(side=LEFT)
-        tarefas.pack(side=LEFT)
-        feitos.pack(side=LEFT, padx= 1, fill=Y)
-        caixa.pack(side=LEFT, fill= Y)
+        criar.pack(side= TOP)
+        criar1.pack(side= LEFT)
+        criar2.pack(side= LEFT)
+        criar3.pack(side= LEFT)
+        botoes.pack(side= TOP)
+        remove.pack(side= LEFT, padx= 5)
+        filtro.pack(side= LEFT)
+        pesquisar.pack(side= LEFT)
+        enviar.pack(side= LEFT)
+        tarefas.pack(side= LEFT)
+        feitos.pack(side= LEFT, padx= 1)
+        scroll.pack(side= RIGHT, fill= Y)
+        caixa.pack(side= LEFT, fill= X)
         
-        linhas2 = finalizados()
-        linhas = teste(lista, tarefas, 'n')
+        linhas2, tamanho = finalizados()
+        linhas, tamanho2 = filtragem(lista, tarefas, 'n')
         for i in linhas2:
                 caixa.insert(END, i)
-        caixa['height'] = 1*len(linhas)
-        janela.geometry('500x'+'10'*len(linhas)+'+550+300')
+        caixa['height'] = len(linhas)+11
+        caixa['width'] = tamanho
+        if ((tamanho+tamanho2)*10) > 505: 
+                tamanho = (tamanho+tamanho2)*10
+        else: 
+                if platform.system() == "Windows": tamanho = 505
+                else: tamanho = 505 + 135
+        if len(linhas) != 0 and len(linhas2) != 0:
+                if len(linhas) > len(linhas2): tamanho2 = 100+(len(linhas)*23)
+                else: tamanho2 = 100+(len(linhas2)*23)
+        else: tamanho2 = 260
+        if platform.system() == 'Windows': janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+550+300')
+        else: janela.geometry(str(tamanho)+'x'+str(tamanho2)+'+'+str(750-int(tamanho/2))+'+'+str(300-int(tamanho2/2)))
         janela.mainloop()
 
-def acesso(usuario, senha, janela, label):
-    global usuarios # Não precisa ser global
-    if usuario.get() in usuarios:
-            if usuarios[usuario.get()] == senha.get():
-                    volta(janela)
-            else:
-                    label['text'] = 'Senha Inválida'
-                    label['foreground'] = 'red'
-    else:
-            label['text'] = 'Usuário não cadastrado'
-            label['foreground'] = 'red'
+def acesso(usuario, senha, janela, label): # Foi retirado a possibilidade de se criar novos users.
+        '''
+        -> Verifica se o usuario e senha estao corretos.
+        Se sim, entra na funcao volta.
+        Se nao, mostra um texto no Label.
+
+        Param usuario = Um Entry.
+        Param senha   = Um Entry.
+        param janela  = Instancia de Tk.
+        Param label   = Label para mostrar onde errou.
+        Sem return.
+        '''
+        usuarios = {'admin':'admin'}
+        if usuario.get() in usuarios:
+                if usuarios[usuario.get()] == senha.get():
+                        volta(janela)
+                else:
+                        label['text'] = 'Senha Inválida'
+                        label['foreground'] = 'red'
+        else:
+                label['text'] = 'Usuário não cadastrado'
+                label['foreground'] = 'red'
+
+def apaga(login, event): login.delete(0, END)
+def apaga2(senha, event): 
+        senha.delete(0, END)
+        senha['show'] = '*'
 
 def entrada(): 
+        '''
+        -> Tela de Login.
+        Com tamanho ajustado para Linux! # NEW
+
+        Sem Param.
+        Sem return.
+        '''
         janela = Tk()
         window(janela)
-        janela.geometry('300x245+550+300')
+        janela.geometry('300x245+750+400')
 
         estilo = t.Style()
         estilo.configure("TLabel", width= 30, background='SpringGreen3', font= 'arial 12 bold', anchor='CENTER')
@@ -131,13 +316,21 @@ def entrada():
         t.Label(janela, text='Senha:', width=8, foreground='white', font='10').place(x=5, y=120)
 
         label = t.Label(janela)
-        login = t.Entry(janela, width= 30)
-        senha = t.Entry(janela, width= 30, show='*')
+        login2 = Frame(janela, bd= 0, highlightthickness=0)
+        senha2 = Frame(janela, bd= 0, highlightthickness=0)
+        login = Entry(login2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
+        login.insert(0, 'Login')
+        login.bind('<Button-1>', partial(apaga, login))
+        senha = Entry(senha2, width= 22, relief=FLAT, background='SpringGreen3', fg='white', font='impact 11', highlightthickness=0)
+        senha.insert(0, 'Senha')
+        senha.bind('<Button-1>', partial(apaga2, senha))
         vazar = t.Button(janela, text='Sair', width=8, command= partial(sair, janela))
         entrar = t.Button(janela, text='Entrar', width=8, command= partial(acesso, login, senha, janela, label))
 
-        login.place(x=75, y=80)
-        senha.place(x=75, y=120)
+        login2.place(x=75, y=80)
+        login.pack(pady=(0,1))
+        senha2.place(x=75, y=120)
+        senha.pack(pady=(0,1))
         vazar.place(x=80, y=160)
         entrar.place(x=175, y=160)
         label.place(x= 17, y= 200)
@@ -149,6 +342,14 @@ def entrada():
         janela.mainloop()
 
 def window(janela):
+        '''
+        -> Atalho para configurar a janela de forma rapida.
+        Adiciona as configuracoes padroes das janelas que chamarem a funcao.
+        Com icone atualizado para o Linux! # NEW
+
+        Param janela = Instancia de Tk.
+        Sem return
+        '''
         janela['bg'] = 'SpringGreen3'
         janela.title('Todo CheckList')
         janela.geometry('300x330+600+350')
@@ -167,5 +368,3 @@ def window(janela):
 
         menu.add_cascade(label= 'Opções', menu= opcoes)
         janela.config(menu= menu)
-
-usuarios = {'admin':'admin'}
