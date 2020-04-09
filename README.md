@@ -7,11 +7,11 @@
 
 >> "O objetivo deste trabalho é praticar a escrita de funções e programas em Python, em particular, programas envolvendo strings, ~~vetores~~, listas, tuplas, dicionários e arquivos. Além disso, é a primeira oportunidade que os alunos têm, no contexto do curso de *Sistemas de Informação*, de desenvolver um sistema não-trivial, ainda que simples." ~[Fernando Castor](https://sites.google.com/a/cin.ufpe.br/castor/).
 
-*Leia sobre o [projeto](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/projeto.pdf) para saber o desenvolvimento.*
+*Leia sobre o [projeto](.github/projeto.pdf) para saber o desenvolvimento.*
 
 <p float="left">
-  <image width=49%, src="./add.gif"/> 
-  <image width=49%, src="./list.gif"/>
+  <image width=49%, src=".github/add.gif"/> 
+  <image width=49%, src=".github/list.gif"/>
 </p>
 
 ## Obtenção do Script
@@ -121,7 +121,7 @@ Download direto pelo botão verde **Clone or Download** ou abra o VSCode, pressi
 - [x] *Compatibilidade com um bot no [Telegram!](https://github.com/Tiodonilo/Projeto-IF968-2019/blob/Projeto_3.0/online.py)*
 
 <p align="center">
-<image src="./new.gif">
+<image src=".github/new.gif">
 </p>
 
 ## Contribuidores

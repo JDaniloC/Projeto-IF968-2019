@@ -1,8 +1,8 @@
 import sys
-from datacao import atual
-from interface import entrada as inter
-from programa import organizar, adicionar, listar, fazer, remover, priorizar
-from imail import enviar
+from utils.datacao import atual
+from utils.interface import entrada as inter
+from utils.programa import organizar, adicionar, listar, fazer, remover, priorizar
+from utils.email import enviar
 
 ADICIONAR = 'a'
 REMOVER = 'r'
@@ -171,5 +171,5 @@ def processarComandos(comandos, telegram = 'n') :
 
 try:
   processarComandos(sys.argv)
-except:
-  print('Nenhum comando passado!')
+except Exception as e:
+  print("Aconteceu esse erro:", e)

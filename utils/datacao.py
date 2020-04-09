@@ -1,7 +1,6 @@
 from time import localtime, time
 import calendar as c
 
-
 def valores():
     '''
     -> Ira pegar o dia, mes, ano, hora, minuto de hoje e o dia de ontem e amanha.

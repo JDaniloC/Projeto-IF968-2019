@@ -1,5 +1,6 @@
 # coding: utf-8
 import telepot
+
 from agenda import processarComandos
 
 bot = telepot.Bot("TOKEN!!")

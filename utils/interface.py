@@ -1,10 +1,12 @@
-from functools import partial
-from tkinter import ttk as t
-from programa import listar, fazer, remover, organizar, adicionar
-import platform
 from tkinter import *
-from datacao import atual
-from imail import enviar
+from tkinter import ttk as t
+from functools import partial
+import platform
+import os
+
+from utils.programa import listar, fazer, remover, organizar, adicionar
+from utils.datacao import atual
+from utils.email import enviar
 
 def sair(janela):
         '''
@@ -213,7 +215,7 @@ def principal():
         estilo.configure('C.TCheckbutton', background= 'DeepSkyBlue2')
         estilo.configure('G.TCheckbutton', background= 'SeaGreen2')
         
-        imagi = PhotoImage(file = 'back.gif')
+        imagi = PhotoImage(file = './utils/assets/back.gif')
         lista = []
         back = Label(janela, image=imagi).place(x=0, y=0, relwidth=1, relheight=1)
         topo = Frame(janela, bg='SpringGreen4').pack(side=TOP, fill=X)
@@ -354,9 +356,9 @@ def window(janela):
         janela.title('Todo CheckList')
         janela.geometry('300x330+600+350')
         if platform.system() == 'Windows':
-                janela.iconbitmap("icone.ico")
+                janela.iconbitmap("./utils/assets/icone.ico")
         else:
-                janela.iconbitmap('@icone.xbm')
+                janela.iconbitmap('@./utils/assets/icone.xbm')
         
         menu = Menu(janela)
         opcoes = Menu(menu)
